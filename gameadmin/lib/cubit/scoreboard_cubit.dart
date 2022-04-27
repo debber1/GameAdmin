@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'scoreboard_state.dart';
@@ -20,7 +22,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     } else if (team == 2 && state.score2 != 99) {
       emit(ScoreboardState(
           timer: state.timer,
@@ -33,7 +39,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     }
   }
 
@@ -50,7 +60,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     } else if (team == 2 && state.score2 != 0) {
       emit(ScoreboardState(
           timer: state.timer,
@@ -63,7 +77,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     }
   }
 
@@ -95,7 +113,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
               timerRunning: true,
               timerShouldRun: state.timerShouldRun,
               breakActive: state.breakActive,
-              shotclockShouldRun: state.shotclockShouldRun));
+              shotclockShouldRun: state.shotclockShouldRun,
+              team1: state.team1,
+              team2: state.team2,
+              team1Colour: state.team1Colour,
+              team2Colour: state.team2Colour));
         }
       });
     }
@@ -121,7 +143,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
                 timerRunning: state.timerRunning,
                 timerShouldRun: state.timerShouldRun,
                 breakActive: state.breakActive,
-                shotclockShouldRun: state.shotclockShouldRun));
+                shotclockShouldRun: state.shotclockShouldRun,
+                team1: state.team1,
+                team2: state.team2,
+                team1Colour: state.team1Colour,
+                team2Colour: state.team2Colour));
           }
         }
       });
@@ -140,7 +166,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: true,
         breakActive: state.breakActive,
-        shotclockShouldRun: state.shotclockShouldRun));
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void pauseTimer() {
@@ -155,7 +185,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: false,
         breakActive: state.breakActive,
-        shotclockShouldRun: state.shotclockShouldRun));
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void resetTimer() {
@@ -172,7 +206,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     } else {
       emit(ScoreboardState(
           timer: state.periodLength * 60,
@@ -185,7 +223,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     }
   }
 
@@ -202,7 +244,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     }
   }
 
@@ -218,7 +264,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: state.timerShouldRun,
         breakActive: true,
-        shotclockShouldRun: false));
+        shotclockShouldRun: false,
+        team1: state.team2,
+        team2: state.team1,
+        team1Colour: state.team2Colour,
+        team2Colour: state.team1Colour));
   }
 
   void restartPeriod() {
@@ -233,7 +283,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: false,
         breakActive: false,
-        shotclockShouldRun: state.shotclockShouldRun));
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void startShotclock() {
@@ -248,7 +302,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: state.timerShouldRun,
         breakActive: state.breakActive,
-        shotclockShouldRun: true));
+        shotclockShouldRun: true,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void pauseShotclock() {
@@ -263,7 +321,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: state.timerShouldRun,
         breakActive: state.breakActive,
-        shotclockShouldRun: false));
+        shotclockShouldRun: false,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void resetShotclock() {
@@ -278,7 +340,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         timerRunning: state.timerRunning,
         timerShouldRun: state.timerShouldRun,
         breakActive: state.breakActive,
-        shotclockShouldRun: state.shotclockShouldRun));
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Colour: state.team1Colour,
+        team2Colour: state.team2Colour));
   }
 
   void changeShotclock(int amount) {
@@ -294,7 +360,11 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           timerRunning: state.timerRunning,
           timerShouldRun: state.timerShouldRun,
           breakActive: state.breakActive,
-          shotclockShouldRun: state.shotclockShouldRun));
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
     }
   }
 }

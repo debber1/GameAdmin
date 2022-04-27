@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -23,218 +25,409 @@ class ScoreBoard extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: AppBar(
-            title: Text('Score Board'),
+            title: Text('GameAdmin'),
           ),
         ),
         body: BlocBuilder<ScoreboardCubit, ScoreboardState>(
           builder: (context, state) {
-            return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    //The left column
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<ScoreboardCubit>(context)
-                                        .incrementScore(1);
-                                  },
-                                  child: _updateBtn(context, Icons.add, 8, 8)),
-                              InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<ScoreboardCubit>(context)
-                                        .decrementScore(1);
-                                  },
-                                  child:
-                                      _updateBtn(context, Icons.remove, 8, 8))
+            return Container(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(flex: 1, child: Container()),
+                                Expanded(
+                                  flex: 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: state.team1Colour,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 25,
+                                  child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, bottom: 5, right: 40),
+                                        child: Text(
+                                          state.team1,
+                                        ),
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: InkWell(
+                                    onTap: () {
+                                      BlocProvider.of<ScoreboardCubit>(context)
+                                          .decrementScore(1);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Colors.redAccent.withOpacity(0.7),
+                                        borderRadius: BorderRadius.horizontal(
+                                            left: Radius.circular(10)),
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.remove),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: InkWell(
+                                    onTap: () {
+                                      BlocProvider.of<ScoreboardCubit>(context)
+                                          .incrementScore(1);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.7),
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)),
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.add),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(flex: 11, child: Container())
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(flex: 1, child: Container()),
+                        Expanded(
+                          flex: 14,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Center(
+                              child: Column(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: <Widget>[
+                                  Expanded(
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Text(
+                                        _printDuration(
+                                            Duration(seconds: state.timer)),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Text(
+                                        state.score1.toString() +
+                                            "-" +
+                                            state.score2.toString(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: InkWell(
+                            onTap: () {
+                              BlocProvider.of<ScoreboardCubit>(context)
+                                  .startTimer();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: Text("Start"),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: InkWell(
+                            onTap: () {
+                              BlocProvider.of<ScoreboardCubit>(context)
+                                  .pauseTimer();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: Text("Time out"),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Row(
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    state.shotclock.toString(),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 5,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 5,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              if (state.shotclockShouldRun) {
+                                                BlocProvider.of<
+                                                            ScoreboardCubit>(
+                                                        context)
+                                                    .pauseShotclock();
+                                              } else {
+                                                BlocProvider.of<
+                                                            ScoreboardCubit>(
+                                                        context)
+                                                    .startShotclock();
+                                              }
+                                            },
+                                            child: Center(
+                                              child: Text(startOrStop(
+                                                  state.shotclockShouldRun)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(),
+                                      ),
+                                      Expanded(
+                                        flex: 5,
+                                        child: InkWell(
+                                          onTap: () {
+                                            BlocProvider.of<ScoreboardCubit>(
+                                                    context)
+                                                .resetShotclock();
+                                            BlocProvider.of<ScoreboardCubit>(
+                                                    context)
+                                                .startShotclock();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                            ),
+                                            child: Center(
+                                              child: Text("Reset"),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ))
                             ],
                           ),
-                          Text(
-                            state.score1.toString(),
-                            style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height / 4),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "Period: " + state.period.toString() + "/2",
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height / 15),
-                        textAlign: TextAlign.left,
-                      )
-                    ],
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(),
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    //The center column
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            _printDuration(Duration(seconds: state.timer)),
-                            style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height / 4),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(flex: 1, child: Container()),
+                                Expanded(
+                                  flex: 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: state.team2Colour,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 25,
+                                  child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 5, bottom: 5, right: 40),
+                                        child: Text(
+                                          state.team2,
+                                        ),
+                                      )),
+                                ),
+                              ],
+                            ),
                           ),
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: InkWell(
+                                    onTap: () {
+                                      BlocProvider.of<ScoreboardCubit>(context)
+                                          .decrementScore(2);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Colors.redAccent.withOpacity(0.7),
+                                        borderRadius: BorderRadius.horizontal(
+                                            left: Radius.circular(10)),
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.remove),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 7,
+                                  child: InkWell(
+                                    onTap: () {
+                                      BlocProvider.of<ScoreboardCubit>(context)
+                                          .incrementScore(2);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.7),
+                                        borderRadius: BorderRadius.horizontal(
+                                            right: Radius.circular(10)),
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.add),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(flex: 11, child: Container())
                         ],
                       ),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .startTimer();
-                              },
-                              child: _updateBtnText(context, "Start", 5, 8.6)),
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .pauseTimer();
-                              },
-                              child: _updateBtnText(context, "Stop", 5, 8.6))
-                        ],
-                      ),
-                      InkWell(
-                          onTap: () {
-                            BlocProvider.of<ScoreboardCubit>(context)
-                                .resetTimer();
-                          },
-                          child: _updateBtnText(context, "Reset", 2.45, 8.6)),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeTimer(-60);
-                              },
-                              child:
-                                  _updateBtnText(context, "-1 minute", 5, 8.6)),
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeTimer(60);
-                              },
-                              child:
-                                  _updateBtnText(context, "+1 minute", 5, 8.6))
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeTimer(-1);
-                              },
-                              child:
-                                  _updateBtnText(context, "-1 second", 5, 8.6)),
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeTimer(1);
-                              },
-                              child:
-                                  _updateBtnText(context, "+1 second", 5, 8.6))
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                  Column(
-                    //The right column
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            state.score2.toString(),
-                            style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height / 4),
-                          ),
-                          Column(
-                            children: [
-                              InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<ScoreboardCubit>(context)
-                                        .incrementScore(2);
-                                  },
-                                  child: _updateBtn(context, Icons.add, 8, 8)),
-                              InkWell(
-                                  onTap: () {
-                                    BlocProvider.of<ScoreboardCubit>(context)
-                                        .decrementScore(2);
-                                  },
-                                  child:
-                                      _updateBtn(context, Icons.remove, 8, 8))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Text(
-                        state.shotclock.toString(),
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height / 5.5),
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .startShotclock();
-                              },
-                              child: _updateBtnText(context, "Start", 8, 12)),
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .pauseShotclock();
-                              },
-                              child: _updateBtnText(context, "Stop", 8, 12))
-                        ],
-                      ),
-                      InkWell(
-                          onTap: () {
-                            BlocProvider.of<ScoreboardCubit>(context)
-                                .resetShotclock();
-                          },
-                          child: _updateBtnText(context, "Reset", 3.85, 12)),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeShotclock(-1);
-                              },
-                              child: _updateBtnText(context, "-1", 8, 12)),
-                          InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context)
-                                    .changeShotclock(1);
-                              },
-                              child: _updateBtnText(context, "+1", 8, 12))
-                        ],
-                      ),
-                    ],
-                  ),
-                ]);
+                ],
+              ),
+            );
           },
         ),
       ),
     );
   }
 
-  Widget _updateBtn(context, IconData icon, double widthDiv, double heightDiv) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
+  Widget _updateBtn(context, IconData icon, int widthFlex) {
+    return Expanded(
+      flex: widthFlex,
       child: Container(
-        width: MediaQuery.of(context).size.width / widthDiv,
-        height: MediaQuery.of(context).size.height / heightDiv,
         decoration: BoxDecoration(
           color: Colors.blue,
-          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Center(
           child: Icon(icon),
@@ -243,16 +436,12 @@ class ScoreBoard extends StatelessWidget {
     );
   }
 
-  Widget _updateBtnText(
-      context, String text, double widthDiv, double heightDiv) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
+  Widget _updateBtnText(context, String text, int widthFlex) {
+    return Expanded(
+      flex: widthFlex,
       child: Container(
-        width: MediaQuery.of(context).size.width / widthDiv,
-        height: MediaQuery.of(context).size.height / heightDiv,
         decoration: BoxDecoration(
           color: Colors.blue,
-          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Center(
           child: Text(text),
@@ -266,5 +455,12 @@ class ScoreBoard extends StatelessWidget {
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String startOrStop(bool shouldRun) {
+    if (shouldRun) {
+      return "Stop";
+    }
+    return "Start";
   }
 }
