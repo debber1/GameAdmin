@@ -72,6 +72,18 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (state.timerShouldRun) {
+          if (state.timer == 0 && !state.breakActive) {
+            startBreak();
+            return;
+          }
+          if (state.timer == 0 && state.breakActive) {
+            restartPeriod();
+            return;
+          }
+          if (state.timer == 0 && state.period == 2) {
+            //TODO: Implement what needs to happen at the end of a match.
+            return;
+          }
           emit(ScoreboardState(
               timer: state.timer - 1,
               shotclock: state.shotclock,
@@ -94,18 +106,23 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (state.shotclockShouldRun) {
-          emit(ScoreboardState(
-              timer: state.timer,
-              shotclock: state.shotclock - 1,
-              breakLength: state.breakLength,
-              periodLength: state.periodLength,
-              score1: state.score1,
-              score2: state.score2,
-              period: state.period,
-              timerRunning: state.timerRunning,
-              timerShouldRun: state.timerShouldRun,
-              breakActive: state.breakActive,
-              shotclockShouldRun: state.shotclockShouldRun));
+          if (state.shotclock == 0) {
+            pauseShotclock();
+            resetShotclock();
+          } else {
+            emit(ScoreboardState(
+                timer: state.timer,
+                shotclock: state.shotclock - 1,
+                breakLength: state.breakLength,
+                periodLength: state.periodLength,
+                score1: state.score1,
+                score2: state.score2,
+                period: state.period,
+                timerRunning: state.timerRunning,
+                timerShouldRun: state.timerShouldRun,
+                breakActive: state.breakActive,
+                shotclockShouldRun: state.shotclockShouldRun));
+          }
         }
       });
     }

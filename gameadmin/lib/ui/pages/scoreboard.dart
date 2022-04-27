@@ -28,23 +28,6 @@ class ScoreBoard extends StatelessWidget {
         ),
         body: BlocBuilder<ScoreboardCubit, ScoreboardState>(
           builder: (context, state) {
-            //Logic for main timer hitting 0
-            if (state.timer == 0 && !state.breakActive) {
-              BlocProvider.of<ScoreboardCubit>(context).startBreak();
-            }
-            if (state.timer == 0 && state.breakActive) {
-              BlocProvider.of<ScoreboardCubit>(context).restartPeriod();
-            }
-            if (state.timer == 0 && state.period == 2) {
-              //TODO: Implement what needs to happen at the end of a match.
-            }
-
-            //Logic for shotclock timer hitting 0
-            if (state.shotclock == 0) {
-              BlocProvider.of<ScoreboardCubit>(context).pauseShotclock();
-              BlocProvider.of<ScoreboardCubit>(context).resetShotclock();
-            }
-
             return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
