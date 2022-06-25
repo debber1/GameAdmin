@@ -367,4 +367,42 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2Colour: state.team2Colour));
     }
   }
+
+  void resetGame() {
+    if (state.breakActive == true || state.period == 2) {
+      emit((ScoreboardState(
+          timer: state.periodLength * 60,
+          shotclock: 60,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: 0,
+          score2: 0,
+          period: 1,
+          timerRunning: state.timerRunning,
+          timerShouldRun: false,
+          breakActive: false,
+          shotclockShouldRun: false,
+          team1: state.team2,
+          team2: state.team1,
+          team1Colour: state.team2Colour,
+          team2Colour: state.team1Colour)));
+    } else {
+      emit((ScoreboardState(
+          timer: state.periodLength * 60,
+          shotclock: 60,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: 0,
+          score2: 0,
+          period: 1,
+          timerRunning: state.timerRunning,
+          timerShouldRun: false,
+          breakActive: false,
+          shotclockShouldRun: false,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour)));
+    }
+  }
 }
