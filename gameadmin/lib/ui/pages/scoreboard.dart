@@ -23,9 +23,22 @@ class ScoreBoard extends StatelessWidget {
       title: 'GameAdmin',
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
+          preferredSize: Size.fromHeight(35.0),
           child: AppBar(
             title: Text('GameAdmin - github.com/debber1/GameAdmin'),
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: (choice) => handleClick(choice, context),
+                itemBuilder: (BuildContext context) {
+                  return {'Reset timer', 'Extensions'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
           ),
         ),
         body: BlocBuilder<ScoreboardCubit, ScoreboardState>(
@@ -455,5 +468,18 @@ class ScoreBoard extends StatelessWidget {
       return "Stop";
     }
     return "Start";
+  }
+
+  void handleClick(String value, BuildContext context) {
+    switch (value) {
+      case 'Reset timer':
+        BlocProvider.of<ScoreboardCubit>(context).resetShotclock();
+        BlocProvider.of<ScoreboardCubit>(context).pauseShotclock();
+        BlocProvider.of<ScoreboardCubit>(context).resetTimer();
+        BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+        break;
+      case 'Extensions':
+        break;
+    }
   }
 }
