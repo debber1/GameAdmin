@@ -25,7 +25,7 @@ class ScoreBoard extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: AppBar(
-            title: Text('GameAdmin'),
+            title: Text('GameAdmin - github.com/debber1/GameAdmin'),
           ),
         ),
         body: BlocBuilder<ScoreboardCubit, ScoreboardState>(
@@ -34,19 +34,22 @@ class ScoreBoard extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    flex: 5,
+                      flex: 2, child: Container()), //spacing on the left side
+                  Expanded(
+                    flex: 50,
                     child: Container(
+                      //First column of three
                       child: Column(
                         children: <Widget>[
                           Expanded(
                             flex: 3,
                             child: Row(
                               children: <Widget>[
-                                Expanded(flex: 1, child: Container()),
                                 Expanded(
-                                  flex: 3,
+                                  flex: 2,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: state.team1Colour,
@@ -74,10 +77,6 @@ class ScoreBoard extends StatelessWidget {
                             flex: 3,
                             child: Row(
                               children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(),
-                                ),
                                 Expanded(
                                   flex: 7,
                                   child: InkWell(
@@ -117,10 +116,6 @@ class ScoreBoard extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(),
-                                ),
                               ],
                             ),
                           ),
@@ -130,7 +125,10 @@ class ScoreBoard extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 4,
+                      flex: 2, child: Container()), //spacing on the right side
+                  Expanded(
+                    //Second column of three
+                    flex: 40,
                     child: Column(
                       children: <Widget>[
                         Expanded(flex: 1, child: Container()),
@@ -317,8 +315,10 @@ class ScoreBoard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  Expanded(flex: 2, child: Container()),
                   Expanded(
-                    flex: 5,
+                    //third column of three
+                    flex: 50,
                     child: Container(
                       child: Column(
                         children: <Widget>[
@@ -326,11 +326,11 @@ class ScoreBoard extends StatelessWidget {
                             flex: 3,
                             child: Row(
                               children: <Widget>[
-                                Expanded(flex: 1, child: Container()),
                                 Expanded(
-                                  flex: 3,
+                                  flex: 2,
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: state.team2Colour,
@@ -358,10 +358,6 @@ class ScoreBoard extends StatelessWidget {
                             flex: 3,
                             child: Row(
                               children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(),
-                                ),
                                 Expanded(
                                   flex: 7,
                                   child: InkWell(
@@ -401,10 +397,6 @@ class ScoreBoard extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(),
-                                ),
                               ],
                             ),
                           ),
@@ -413,6 +405,7 @@ class ScoreBoard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Expanded(flex: 2, child: Container()),
                 ],
               ),
             );
