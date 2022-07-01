@@ -30,8 +30,7 @@ class ScoreBoard extends StatelessWidget {
               PopupMenuButton<String>(
                 onSelected: (choice) => handleClick(choice, context),
                 itemBuilder: (BuildContext context) {
-                  return {'Reset timer', 'Reset game', 'Extensions'}
-                      .map((String choice) {
+                  return {'Reset timer', 'Reset game'}.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(choice),
@@ -171,7 +170,8 @@ class ScoreBoard extends StatelessWidget {
                                             state.breakLength,
                                             state.period,
                                             state.breakActive,
-                                            state.periodLength),
+                                            state.periodLength,
+                                            (state.score1 == state.score2)),
                                       ),
                                     ),
                                   ),
@@ -487,8 +487,6 @@ class ScoreBoard extends StatelessWidget {
       case 'Reset game':
         BlocProvider.of<ScoreboardCubit>(context).resetGame();
         break;
-      case 'Extensions':
-        break;
     }
   }
 
@@ -503,19 +501,47 @@ class ScoreBoard extends StatelessWidget {
   }
 
   String breakAlert(BuildContext context, int timer, int breakLength,
-      int period, bool breakActive, int periodLength) {
-    if (timer == breakLength * 60 && period == 1 && breakActive == true) {
+      int period, bool breakActive, int periodLength, bool draw) {
+    if (timer == breakLength * 60 &&
+        period == 1 &&
+        breakActive == true &&
+        _dialogShowing == false) {
       Future.delayed(Duration.zero,
           () => _showDialogGeneral(context, "Break", "The break is starting."));
     }
-    if (timer == periodLength * 60 && period == 2) {
+    if (timer == 0 &&
+        period == 1 &&
+        breakActive == true &&
+        _dialogShowing == false) {
       Future.delayed(Duration.zero,
           () => _showDialogGeneral(context, "Break", "The break is ending."));
+    }
+    if (timer == 0 &&
+        period >= 2 &&
+        draw == false &&
+        breakActive == false &&
+        _dialogShowing == false) {
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogGeneral(
+              context, "End of the game", "The game time has ended."));
+    }
+    if (timer == 0 &&
+        period >= 2 &&
+        draw == true &&
+        breakActive == false &&
+        _dialogShowing == false) {
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogEnd(
+              context, "End of the game", "The game time has ended."));
     }
     return _printDuration(Duration(seconds: timer));
   }
 
+  bool _dialogShowing = false;
   void _showDialogGeneral(BuildContext context, String title, String text) {
+    _dialogShowing = true;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -537,6 +563,42 @@ class ScoreBoard extends StatelessWidget {
           ),
         );
       },
-    );
+    ).then((_) => _dialogShowing = false);
+  }
+
+  void _showDialogEnd(BuildContext contextI, String title, String text) {
+    _dialogShowing = true;
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'End game',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardCubit>(contextI).extensions(300);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Extensions',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _dialogShowing = false);
   }
 }

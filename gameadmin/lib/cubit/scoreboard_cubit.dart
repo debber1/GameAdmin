@@ -90,7 +90,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (state.timerShouldRun) {
-          if (state.timer == 0 && !state.breakActive) {
+          if (state.timer == 0 && !state.breakActive && state.period == 1) {
             startBreak();
             return;
           }
@@ -98,8 +98,9 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
             restartPeriod();
             return;
           }
-          if (state.timer == 0 && state.period == 2) {
+          if (state.timer == 0 && state.period >= 2) {
             //TODO: Implement what needs to happen at the end of a match.
+            pauseTimer();
             return;
           }
           emit(ScoreboardState(
@@ -370,7 +371,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
 
   void resetGame() {
     if (state.breakActive == true || state.period == 2) {
-      emit((ScoreboardState(
+      emit(ScoreboardState(
           timer: state.periodLength * 60,
           shotclock: 60,
           breakLength: state.breakLength,
@@ -385,9 +386,9 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team1: state.team2,
           team2: state.team1,
           team1Colour: state.team2Colour,
-          team2Colour: state.team1Colour)));
+          team2Colour: state.team1Colour));
     } else {
-      emit((ScoreboardState(
+      emit(ScoreboardState(
           timer: state.periodLength * 60,
           shotclock: 60,
           breakLength: state.breakLength,
@@ -402,7 +403,26 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team1: state.team1,
           team2: state.team2,
           team1Colour: state.team1Colour,
-          team2Colour: state.team2Colour)));
+          team2Colour: state.team2Colour));
     }
+  }
+
+  void extensions(int length) {
+    emit(ScoreboardState(
+        timer: length,
+        shotclock: 60,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score2,
+        score2: state.score1,
+        period: state.period + 1,
+        timerRunning: state.timerRunning,
+        timerShouldRun: false,
+        breakActive: false,
+        shotclockShouldRun: false,
+        team1: state.team2,
+        team2: state.team1,
+        team1Colour: state.team2Colour,
+        team2Colour: state.team1Colour));
   }
 }
