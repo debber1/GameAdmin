@@ -425,4 +425,23 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team1Colour: state.team2Colour,
         team2Colour: state.team1Colour));
   }
+
+  void switchSides() {
+    emit(ScoreboardState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score2,
+        score2: state.score1,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team2,
+        team2: state.team1,
+        team1Colour: state.team2Colour,
+        team2Colour: state.team1Colour));
+  }
 }

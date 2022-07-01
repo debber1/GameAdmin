@@ -30,7 +30,8 @@ class ScoreBoard extends StatelessWidget {
               PopupMenuButton<String>(
                 onSelected: (choice) => handleClick(choice, context),
                 itemBuilder: (BuildContext context) {
-                  return {'Reset timer', 'Reset game'}.map((String choice) {
+                  return {'Reset timer', 'Reset game', 'Switch sides'}
+                      .map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(choice),
@@ -486,6 +487,9 @@ class ScoreBoard extends StatelessWidget {
         break;
       case 'Reset game':
         BlocProvider.of<ScoreboardCubit>(context).resetGame();
+        break;
+      case 'Switch sides':
+        BlocProvider.of<ScoreboardCubit>(context).switchSides();
         break;
     }
   }
