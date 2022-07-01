@@ -249,7 +249,7 @@ class ScoreBoard extends StatelessWidget {
                                 child: FittedBox(
                                   fit: BoxFit.contain,
                                   child: Text(
-                                    state.shotclock.toString(),
+                                    shotClockAlert(context, state.shotclock),
                                   ),
                                 ),
                               ),
@@ -485,5 +485,37 @@ class ScoreBoard extends StatelessWidget {
       case 'Extensions':
         break;
     }
+  }
+
+  String shotClockAlert(BuildContext context, int shotClock) {
+    if (shotClock == 0) {
+      Future.delayed(Duration.zero, () => _showDialogShotClock(context));
+    }
+    return shotClock.toString();
+  }
+
+  void _showDialogShotClock(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Shotclock'),
+            content: Text('The shotclock timer reached zero.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
