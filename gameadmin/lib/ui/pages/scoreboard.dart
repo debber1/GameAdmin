@@ -329,6 +329,19 @@ class ScoreBoard extends StatelessWidget {
                           ),
                         ),
                         Expanded(
+                          flex: 5,
+                          child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 5, bottom: 5, right: 5, left: 5),
+                                child: Text(
+                                  periodIndicator(
+                                      state.period, state.breakActive),
+                                ),
+                              )),
+                        ),
+                        Expanded(
                           flex: 1,
                           child: Container(),
                         ),
@@ -461,6 +474,22 @@ class ScoreBoard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String periodIndicator(int period, bool breakActive) {
+    String output = "Extension " + (period - 2).toString();
+    switch (period) {
+      case 1:
+        output = "Period 1/2";
+        break;
+      case 2:
+        output = "Period 2/2";
+        break;
+    }
+    if (breakActive) {
+      output = "Break";
+    }
+    return output;
   }
 
   String _printDuration(Duration duration) {
