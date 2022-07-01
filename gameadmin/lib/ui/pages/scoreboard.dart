@@ -165,8 +165,13 @@ class ScoreBoard extends StatelessWidget {
                                     child: FittedBox(
                                       fit: BoxFit.contain,
                                       child: Text(
-                                        _printDuration(
-                                            Duration(seconds: state.timer)),
+                                        breakAlert(
+                                            context,
+                                            state.timer,
+                                            state.breakLength,
+                                            state.period,
+                                            state.breakActive,
+                                            state.periodLength),
                                       ),
                                     ),
                                   ),
@@ -489,19 +494,35 @@ class ScoreBoard extends StatelessWidget {
 
   String shotClockAlert(BuildContext context, int shotClock) {
     if (shotClock == 0) {
-      Future.delayed(Duration.zero, () => _showDialogShotClock(context));
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogGeneral(
+              context, "Shotclock", "The shotclock timer reached zero."));
     }
     return shotClock.toString();
   }
 
-  void _showDialogShotClock(BuildContext context) {
+  String breakAlert(BuildContext context, int timer, int breakLength,
+      int period, bool breakActive, int periodLength) {
+    if (timer == breakLength * 60 && period == 1 && breakActive == true) {
+      Future.delayed(Duration.zero,
+          () => _showDialogGeneral(context, "Break", "The break is starting."));
+    }
+    if (timer == periodLength * 60 && period == 2) {
+      Future.delayed(Duration.zero,
+          () => _showDialogGeneral(context, "Break", "The break is ending."));
+    }
+    return _printDuration(Duration(seconds: timer));
+  }
+
+  void _showDialogGeneral(BuildContext context, String title, String text) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Expanded(
           child: AlertDialog(
-            title: Text('Shotclock'),
-            content: Text('The shotclock timer reached zero.'),
+            title: Text(title),
+            content: Text(text),
             actions: [
               TextButton(
                 onPressed: () {
