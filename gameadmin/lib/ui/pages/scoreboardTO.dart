@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -7,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
 
-class ScoreBoard extends StatelessWidget {
-  ScoreBoard({Key? key}) : super(key: key);
+class ScoreBoardTO extends StatelessWidget {
+  ScoreBoardTO({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +23,7 @@ class ScoreBoard extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(35.0),
           child: AppBar(
-            title: Text('GameAdmin - github.com/debber1/GameAdmin'),
+            title: Text('GameAdmin - github.com/debber1/GameAdmin -- TO MODE'),
             actions: <Widget>[
               PopupMenuButton<String>(
                 onSelected: (choice) => handleClick(choice, context),

@@ -10,8 +10,8 @@ import 'package:gameadmin/util/constants.dart';
 
 import '../../cubit/scoreboard_cubit.dart';
 
-class Settings extends StatelessWidget {
-  Settings({Key? key}) : super(key: key);
+class MatchPicker extends StatelessWidget {
+  MatchPicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,28 +38,8 @@ class Settings extends StatelessWidget {
               Expanded(
                 flex: 50,
                 child: InkWell(
-                  onTap: () => Navigator.pushNamed(context, gameAdminRoute),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.7),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(10),
-                          right: Radius.circular(10)),
-                    ),
-                    child: Center(
-                      child: Text("Without Tournament Organiser"),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 50,
-                child: InkWell(
-                  onTap: () => Navigator.pushNamed(context, matchPickerRoute),
+                  onTap: () =>
+                      Navigator.pushNamed(context, tournamentOrganiserRoute),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.7),
