@@ -15,7 +15,17 @@ class MatchPickerCubit extends Cubit<MatchPickerState> {
 
   MatchPickerCubit(this.repositoryTO) : super(MatchPickerInitial());
 
+  void fetchGames(String pitchId) {
+    repositoryTO.fetchGames(pitchId).then((games) {
+      emit(MatchPickerGames(games));
+    });
+    int b = 2;
+  }
+
   void fetchPitch() {
-    repositoryTO.fetchPitch();
+    repositoryTO.fetchPitch(state.pitchNumber).then((pitch) {
+      emit(MatchPickerPitch(pitch));
+      fetchGames(pitch.id);
+    });
   }
 }
