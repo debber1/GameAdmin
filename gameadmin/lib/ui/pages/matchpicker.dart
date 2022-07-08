@@ -5,16 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gameadmin/ui/pages/scoreboard.dart';
+import 'package:gameadmin/cubit/matchpicker_cubit.dart';
 import 'package:gameadmin/util/constants.dart';
-
-import '../../cubit/scoreboard_cubit.dart';
 
 class MatchPicker extends StatelessWidget {
   MatchPicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<MatchPickerCubit>(context).fetchPitch();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -28,37 +27,41 @@ class MatchPicker extends StatelessWidget {
             title: Text('GameAdmin - github.com/debber1/GameAdmin'),
           ),
         ),
-        body: Container(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 50,
-                child: InkWell(
-                  onTap: () =>
-                      Navigator.pushNamed(context, tournamentOrganiserRoute),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.7),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(10),
-                          right: Radius.circular(10)),
-                    ),
-                    child: Center(
-                      child: Text("With Tournament Organiser"),
+        body: BlocBuilder<MatchPickerCubit, MatchPickerState>(
+          builder: (context, state) {
+            return Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 50,
+                    child: InkWell(
+                      onTap: () => Navigator.pushNamed(
+                          context, tournamentOrganiserRoute),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.7),
+                          borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(10),
+                              right: Radius.circular(10)),
+                        ),
+                        child: Center(
+                          child: Text("With Tournament Organiser"),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 2,
-                child: Container(),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

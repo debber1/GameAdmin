@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gameadmin/com/networkServiceTO.dart';
+import 'package:gameadmin/com/repositoryTO.dart';
+import 'package:gameadmin/cubit/matchpicker_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
 import 'package:gameadmin/ui/pages/matchpicker.dart';
 import 'package:gameadmin/ui/pages/scoreboard.dart';
@@ -9,6 +12,8 @@ import 'package:gameadmin/ui/pages/settings.dart';
 import 'package:gameadmin/util/constants.dart';
 
 class GameAdminRouter {
+  RepositoryTO repositoryTO = RepositoryTO(NetworkServiceTO());
+
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
@@ -20,7 +25,12 @@ class GameAdminRouter {
                   child: ScoreBoard(),
                 ));
       case matchPickerRoute:
-        return MaterialPageRoute(builder: (_) => MatchPicker());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (BuildContext context) =>
+                      MatchPickerCubit(repositoryTO),
+                  child: MatchPicker(),
+                ));
       case tournamentOrganiserRoute:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
