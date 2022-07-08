@@ -19,7 +19,6 @@ class MatchPickerCubit extends Cubit<MatchPickerState> {
     repositoryTO.fetchGames(pitchId).then((games) {
       emit(MatchPickerGames(games));
     });
-    int b = 2;
   }
 
   void fetchPitch() {

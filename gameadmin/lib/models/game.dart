@@ -22,7 +22,7 @@ class Game {
   bool forfait;
   int? round;
   String? idGroupRef;
-  int? positionRef;
+  String? positionRef;
   String? gameRef;
   factory Game.fromJson(Map<String, dynamic> data) {
     // note the explicit cast to String
@@ -129,7 +129,7 @@ class Game {
       throw UnsupportedError('Invalid data: $data -> "idGroupRef" is missing');
     }
 
-    final positionRef = int.parse(data['positionRef']) as int;
+    final positionRef = data['positionRef'] as String;
     if (positionRef == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "positionRef" is missing');
