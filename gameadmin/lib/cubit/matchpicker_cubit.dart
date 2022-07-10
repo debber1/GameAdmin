@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:gameadmin/ui/pages/matchpicker.dart';
 import 'package:meta/meta.dart';
 
 import '../com/repositoryTO.dart';
@@ -17,13 +18,15 @@ class MatchPickerCubit extends Cubit<MatchPickerState> {
 
   void fetchGames(String pitchId) {
     repositoryTO.fetchGames(pitchId).then((games) {
-      emit(MatchPickerGames(games));
+      emit(MatchPickerState(
+          pitchNumber: state.pitchNumber, pitch: state.pitch, games: games));
     });
   }
 
   void fetchPitch() {
     repositoryTO.fetchPitch(state.pitchNumber).then((pitch) {
-      emit(MatchPickerPitch(pitch));
+      emit(MatchPickerState(
+          pitchNumber: state.pitchNumber, pitch: pitch, games: state.games));
       fetchGames(pitch.id);
     });
   }
