@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/com/networkServiceTO.dart';
 import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/cubit/matchpicker_cubit.dart';
+import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
+import 'package:gameadmin/models/game.dart';
 import 'package:gameadmin/ui/pages/matchpicker.dart';
 import 'package:gameadmin/ui/pages/scoreboard.dart';
 import 'package:gameadmin/ui/pages/scoreboardTO.dart';
@@ -32,9 +34,10 @@ class GameAdminRouter {
                   child: MatchPicker(),
                 ));
       case tournamentOrganiserRoute:
+        final game = settings.arguments as Game;
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (BuildContext context) => ScoreboardCubit(),
+                  create: (BuildContext context) => ScoreboardTOCubit(game),
                   child: ScoreBoardTO(),
                 ));
       default:

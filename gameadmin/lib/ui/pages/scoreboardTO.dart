@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
 
 class ScoreBoardTO extends StatelessWidget {
@@ -10,8 +11,8 @@ class ScoreBoardTO extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ScoreboardCubit>(context).shotclockTimer();
-    BlocProvider.of<ScoreboardCubit>(context).mainTimer();
+    BlocProvider.of<ScoreboardTOCubit>(context).shotclockTimer();
+    BlocProvider.of<ScoreboardTOCubit>(context).mainTimer();
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -44,7 +45,7 @@ class ScoreBoardTO extends StatelessWidget {
             ],
           ),
         ),
-        body: BlocBuilder<ScoreboardCubit, ScoreboardState>(
+        body: BlocBuilder<ScoreboardTOCubit, ScoreboardTOState>(
           builder: (context, state) {
             return Container(
               child: Row(
@@ -68,7 +69,7 @@ class ScoreBoardTO extends StatelessWidget {
                                         bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          color: state.team1Colour,
+                                          color: Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(5)),
                                     ),
@@ -82,7 +83,7 @@ class ScoreBoardTO extends StatelessWidget {
                                         padding: const EdgeInsets.only(
                                             top: 5, bottom: 5, right: 40),
                                         child: Text(
-                                          state.team1,
+                                          state.team1.name,
                                         ),
                                       )),
                                 ),
@@ -97,7 +98,8 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardCubit>(context)
+                                      BlocProvider.of<ScoreboardTOCubit>(
+                                              context)
                                           .decrementScore(1);
                                     },
                                     child: Container(
@@ -117,7 +119,8 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardCubit>(context)
+                                      BlocProvider.of<ScoreboardTOCubit>(
+                                              context)
                                           .incrementScore(1);
                                     },
                                     child: Container(
@@ -201,7 +204,7 @@ class ScoreBoardTO extends StatelessWidget {
                           flex: 5,
                           child: InkWell(
                             onTap: () {
-                              BlocProvider.of<ScoreboardCubit>(context)
+                              BlocProvider.of<ScoreboardTOCubit>(context)
                                   .startTimer();
                             },
                             child: Container(
@@ -226,7 +229,7 @@ class ScoreBoardTO extends StatelessWidget {
                           flex: 5,
                           child: InkWell(
                             onTap: () {
-                              BlocProvider.of<ScoreboardCubit>(context)
+                              BlocProvider.of<ScoreboardTOCubit>(context)
                                   .pauseTimer();
                             },
                             child: Container(
@@ -279,12 +282,12 @@ class ScoreBoardTO extends StatelessWidget {
                                             onTap: () {
                                               if (state.shotclockShouldRun) {
                                                 BlocProvider.of<
-                                                            ScoreboardCubit>(
+                                                            ScoreboardTOCubit>(
                                                         context)
                                                     .pauseShotclock();
                                               } else {
                                                 BlocProvider.of<
-                                                            ScoreboardCubit>(
+                                                            ScoreboardTOCubit>(
                                                         context)
                                                     .startShotclock();
                                               }
@@ -304,10 +307,10 @@ class ScoreBoardTO extends StatelessWidget {
                                         flex: 5,
                                         child: InkWell(
                                           onTap: () {
-                                            BlocProvider.of<ScoreboardCubit>(
+                                            BlocProvider.of<ScoreboardTOCubit>(
                                                     context)
                                                 .resetShotclock();
-                                            BlocProvider.of<ScoreboardCubit>(
+                                            BlocProvider.of<ScoreboardTOCubit>(
                                                     context)
                                                 .startShotclock();
                                           },
@@ -368,7 +371,7 @@ class ScoreBoardTO extends StatelessWidget {
                                         bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          color: state.team2Colour,
+                                          color: Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(5)),
                                     ),
@@ -382,7 +385,7 @@ class ScoreBoardTO extends StatelessWidget {
                                         padding: const EdgeInsets.only(
                                             top: 5, bottom: 5, right: 40),
                                         child: Text(
-                                          state.team2,
+                                          state.team2.name,
                                         ),
                                       )),
                                 ),
@@ -397,7 +400,8 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardCubit>(context)
+                                      BlocProvider.of<ScoreboardTOCubit>(
+                                              context)
                                           .decrementScore(2);
                                     },
                                     child: Container(
@@ -417,7 +421,8 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardCubit>(context)
+                                      BlocProvider.of<ScoreboardTOCubit>(
+                                              context)
                                           .incrementScore(2);
                                     },
                                     child: Container(
@@ -511,16 +516,16 @@ class ScoreBoardTO extends StatelessWidget {
   void handleClick(String value, BuildContext context) {
     switch (value) {
       case 'Reset timer':
-        BlocProvider.of<ScoreboardCubit>(context).resetShotclock();
-        BlocProvider.of<ScoreboardCubit>(context).pauseShotclock();
-        BlocProvider.of<ScoreboardCubit>(context).resetTimer();
-        BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+        BlocProvider.of<ScoreboardTOCubit>(context).resetShotclock();
+        BlocProvider.of<ScoreboardTOCubit>(context).pauseShotclock();
+        BlocProvider.of<ScoreboardTOCubit>(context).resetTimer();
+        BlocProvider.of<ScoreboardTOCubit>(context).pauseTimer();
         break;
       case 'Reset game':
-        BlocProvider.of<ScoreboardCubit>(context).resetGame();
+        BlocProvider.of<ScoreboardTOCubit>(context).resetGame();
         break;
       case 'Switch sides':
-        BlocProvider.of<ScoreboardCubit>(context).switchSides();
+        BlocProvider.of<ScoreboardTOCubit>(context).switchSides();
         break;
       case 'Back to settings':
         Navigator.pop(context);
@@ -625,7 +630,7 @@ class ScoreBoardTO extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  BlocProvider.of<ScoreboardCubit>(contextI).extensions(300);
+                  BlocProvider.of<ScoreboardTOCubit>(contextI).extensions(300);
                   Navigator.of(context).pop();
                 },
                 child: Text(
