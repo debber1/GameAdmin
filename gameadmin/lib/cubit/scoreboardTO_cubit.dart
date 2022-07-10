@@ -15,6 +15,23 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   final Game game;
 
   ScoreboardTOCubit(this.game) : super(ScoreboardTOInitial());
+  void setstate() {
+    emit(ScoreboardTOState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: game.scoreTeam1,
+        score2: game.scoreTeam2,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: game.team1,
+        team2: game.team2));
+  }
+
   void incrementScore(int team) {
     if (team == 1 && state.score1 != 99) {
       emit(ScoreboardTOState(

@@ -13,6 +13,7 @@ class ScoreBoardTO extends StatelessWidget {
   Widget build(BuildContext context) {
     BlocProvider.of<ScoreboardTOCubit>(context).shotclockTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).mainTimer();
+    BlocProvider.of<ScoreboardTOCubit>(context).setstate();
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -63,12 +64,16 @@ class ScoreBoardTO extends StatelessWidget {
                             child: Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 2,
+                                  flex: 8,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: NetworkImage(
+                                                  state.team1.country.flag)),
                                           color: Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(5)),
@@ -81,7 +86,10 @@ class ScoreBoardTO extends StatelessWidget {
                                       fit: BoxFit.contain,
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 5, bottom: 5, right: 40),
+                                            top: 5,
+                                            bottom: 5,
+                                            left: 5,
+                                            right: 5),
                                         child: Text(
                                           state.team1.name,
                                         ),
@@ -138,7 +146,87 @@ class ScoreBoardTO extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Expanded(flex: 11, child: Container())
+                          Expanded(
+                              flex: 5,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.yellow,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: ClipRRect(
+                                          child: Banner(
+                                            message: 'Ejection',
+                                            location: BannerLocation.topEnd,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Expanded(flex: 6, child: Container()),
                         ],
                       ),
                     ),
@@ -365,12 +453,16 @@ class ScoreBoardTO extends StatelessWidget {
                             child: Row(
                               children: <Widget>[
                                 Expanded(
-                                  flex: 2,
+                                  flex: 8,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         bottom: 8.0, top: 8.0),
                                     child: Container(
                                       decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: NetworkImage(
+                                                  state.team2.country.flag)),
                                           color: Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(5)),
@@ -383,7 +475,10 @@ class ScoreBoardTO extends StatelessWidget {
                                       fit: BoxFit.contain,
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 5, bottom: 5, right: 40),
+                                            top: 5,
+                                            bottom: 5,
+                                            left: 5,
+                                            right: 5),
                                         child: Text(
                                           state.team2.name,
                                         ),
@@ -440,7 +535,87 @@ class ScoreBoardTO extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Expanded(flex: 11, child: Container())
+                          Expanded(
+                              flex: 5,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.yellow,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                          top: 8.0,
+                                          right: 2,
+                                          left: 2),
+                                      child: InkWell(
+                                        child: ClipRRect(
+                                          child: Banner(
+                                            message: 'Ejection',
+                                            location: BannerLocation.topEnd,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Expanded(flex: 6, child: Container())
                         ],
                       ),
                     ),
