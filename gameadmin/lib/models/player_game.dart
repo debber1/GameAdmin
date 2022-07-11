@@ -7,6 +7,7 @@ import 'package:gameadmin/models/team.dart';
 class PlayerGame {
   String id;
   Player player;
+  int goals;
   int green;
   int yellow;
   int red;
@@ -17,6 +18,8 @@ class PlayerGame {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "id" is missing');
     }
+
+    final goals = 0;
 
     final playerData = data['player'] as dynamic?;
     final player = playerData != null
@@ -54,13 +57,14 @@ class PlayerGame {
       throw UnsupportedError('Invalid data: $data -> "redEjection" is missing');
     }
 
-    return PlayerGame(id, player, green, yellow, red, redEjection);
+    return PlayerGame(id, player, goals, green, yellow, red, redEjection);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'player': player.toJson(),
+      'goals': goals,
       'green': green,
       'yellow': yellow,
       'red': red,
@@ -68,6 +72,6 @@ class PlayerGame {
     };
   }
 
-  PlayerGame(this.id, this.player, this.green, this.yellow, this.red,
-      this.redEjection);
+  PlayerGame(this.id, this.player, this.goals, this.green, this.yellow,
+      this.red, this.redEjection);
 }

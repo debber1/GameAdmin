@@ -512,4 +512,30 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       game.scoreTeam2 = state.score1;
     }
   }
+
+  void goalPlayer(PlayerGame player) {
+    for (var playerlist in state.team1Players) {
+      if (playerlist == player) {
+        playerlist.goals++;
+      }
+    }
+    for (var playerlist in state.team2Players) {
+      if (playerlist == player) {
+        playerlist.goals++;
+      }
+    }
+  }
+
+  void noGoalPlayer(PlayerGame player) {
+    for (var playerlist in state.team1Players) {
+      if (playerlist == player) {
+        playerlist.goals--;
+      }
+    }
+    for (var playerlist in state.team2Players) {
+      if (playerlist == player) {
+        playerlist.goals--;
+      }
+    }
+  }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
+import 'package:gameadmin/models/player_game.dart';
 
 class ScoreBoardTO extends StatelessWidget {
   ScoreBoardTO({Key? key}) : super(key: key);
@@ -107,9 +108,12 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardTOCubit>(
-                                              context)
-                                          .decrementScore(1);
+                                      _showDialogNoScore(
+                                          context,
+                                          "Who has too many goals?",
+                                          "Decrement Goal",
+                                          state.team1Players,
+                                          1);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -128,9 +132,12 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardTOCubit>(
-                                              context)
-                                          .incrementScore(1);
+                                      _showDialogScore(
+                                          context,
+                                          "Who scored the goal?",
+                                          "Increment Goal",
+                                          state.team1Players,
+                                          1);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -496,9 +503,12 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardTOCubit>(
-                                              context)
-                                          .decrementScore(2);
+                                      _showDialogNoScore(
+                                          context,
+                                          "Who has too many goals?",
+                                          "Decrement Goal",
+                                          state.team2Players,
+                                          2);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -517,9 +527,12 @@ class ScoreBoardTO extends StatelessWidget {
                                   flex: 7,
                                   child: InkWell(
                                     onTap: () {
-                                      BlocProvider.of<ScoreboardTOCubit>(
-                                              context)
-                                          .incrementScore(2);
+                                      _showDialogScore(
+                                          context,
+                                          "Who scored the goal?",
+                                          "Increment Goal",
+                                          state.team2Players,
+                                          2);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -811,6 +824,199 @@ class ScoreBoardTO extends StatelessWidget {
                 },
                 child: Text(
                   'Extensions',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _dialogShowing = false);
+  }
+
+  void _showDialogScore(BuildContext contextI, String title, String text,
+      List<PlayerGame> players, int team) {
+    _dialogShowing = true;
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text(title),
+            content: Container(
+              width: MediaQuery.of(contextI).size.width * 0.7,
+              child: GridView.count(
+                crossAxisCount: 5,
+                children: List.generate(players.length, (index) {
+                  return InkWell(
+                    onTap: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .incrementScore(team);
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .goalPlayer(players[index]);
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                            child: Column(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                  child: Text('Player ' +
+                                      players[index].player.number.toString())),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 10, left: 10),
+                                    child: Text(
+                                      players[index].player.firstName +
+                                          " " +
+                                          players[index].player.lastName,
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI)
+                      .incrementScore(team);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Player not in list',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _dialogShowing = false);
+  }
+
+  void _showDialogNoScore(BuildContext contextI, String title, String text,
+      List<PlayerGame> playersI, int team) {
+    List<PlayerGame> players = [];
+    for (var player in playersI) {
+      if (player.goals != 0) {
+        players.add(player);
+      }
+    }
+    _dialogShowing = true;
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text(title),
+            content: Container(
+              width: MediaQuery.of(contextI).size.width * 0.7,
+              child: GridView.count(
+                crossAxisCount: 5,
+                children: List.generate(players.length, (index) {
+                  return InkWell(
+                    onTap: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .decrementScore(team);
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .noGoalPlayer(players[index]);
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                            child: Column(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                  child: Text('Player ' +
+                                      players[index].player.number.toString())),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 10, left: 10),
+                                    child: Text(
+                                      players[index].player.firstName +
+                                          " " +
+                                          players[index].player.lastName,
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Center(
+                                  child: Text('Goals: ' +
+                                      players[index].goals.toString())),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI)
+                      .decrementScore(team);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Player not in list',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
