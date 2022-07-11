@@ -74,6 +74,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players));
     }
+    fixGoal();
   }
 
   void decrementScore(int team) {
@@ -112,6 +113,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players));
     }
+    fixGoal();
   }
 
   void mainTimer() {
@@ -299,6 +301,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team2: state.team1,
         team1Players: state.team2Players,
         team2Players: state.team1Players));
+    fixGoal();
   }
 
   void restartPeriod() {
@@ -318,6 +321,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team2: state.team2,
         team1Players: state.team1Players,
         team2Players: state.team2Players));
+    fixGoal();
   }
 
   void startShotclock() {
@@ -434,6 +438,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players));
     }
+    fixGoal();
   }
 
   void extensions(int length) {
@@ -453,6 +458,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team2: state.team1,
         team1Players: state.team1Players,
         team2Players: state.team2Players));
+    fixGoal();
   }
 
   void switchSides() {
@@ -472,6 +478,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team2: state.team1,
         team1Players: state.team2Players,
         team2Players: state.team1Players));
+    fixGoal();
   }
 
   void fetchPlayers() {
@@ -494,5 +501,15 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: players[0],
           team2Players: players[1]));
     });
+  }
+
+  void fixGoal() {
+    if (state.team1.id == game.team1.id) {
+      game.scoreTeam1 = state.score1;
+      game.scoreTeam2 = state.score2;
+    } else {
+      game.scoreTeam1 = state.score2;
+      game.scoreTeam2 = state.score1;
+    }
   }
 }
