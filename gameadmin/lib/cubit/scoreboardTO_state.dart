@@ -14,6 +14,9 @@ class ScoreboardTOState {
   bool shotclockShouldRun;
   Team team1;
   Team team2;
+  List<PlayerGame> team1Players;
+  List<PlayerGame> team2Players;
+
   ScoreboardTOState(
       {required this.timer,
       required this.shotclock,
@@ -27,7 +30,9 @@ class ScoreboardTOState {
       required this.breakActive,
       required this.shotclockShouldRun,
       required this.team1,
-      required this.team2});
+      required this.team2,
+      required this.team1Players,
+      required this.team2Players});
 }
 
 class ScoreboardTOInitial extends ScoreboardTOState {
@@ -47,5 +52,7 @@ class ScoreboardTOInitial extends ScoreboardTOState {
             team1: Team('', Division('', '', true, ''), Country('', '', '', ''),
                 '', '', false, '', ''),
             team2: Team('', Division('', '', true, ''), Country('', '', '', ''),
-                '', '', false, '', ''));
+                '', '', false, '', ''),
+            team1Players: [],
+            team2Players: []);
 }

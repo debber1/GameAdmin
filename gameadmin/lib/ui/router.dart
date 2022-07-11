@@ -37,7 +37,8 @@ class GameAdminRouter {
         final game = settings.arguments as Game;
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
-                  create: (BuildContext context) => ScoreboardTOCubit(game),
+                  create: (BuildContext context) =>
+                      ScoreboardTOCubit(game, repositoryTO),
                   child: ScoreBoardTO(),
                 ));
       default:
