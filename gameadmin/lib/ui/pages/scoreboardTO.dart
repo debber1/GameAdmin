@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
+import 'package:gameadmin/models/card.dart';
 import 'package:gameadmin/models/player_game.dart';
+import 'package:gameadmin/models/team.dart';
 
 class ScoreBoardTO extends StatelessWidget {
   ScoreBoardTO({Key? key}) : super(key: key);
@@ -166,6 +168,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Green Card",
+                                              "Green Card",
+                                              state.team1Players,
+                                              1);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.green,
@@ -183,6 +193,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Yellow Card",
+                                              "Yellow Card",
+                                              state.team1Players,
+                                              2);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.yellow,
@@ -200,6 +218,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Red Card",
+                                              "Red Card",
+                                              state.team1Players,
+                                              3);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.red,
@@ -217,6 +243,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Red EJECTION Card",
+                                              "Red EJECTION Card",
+                                              state.team1Players,
+                                              4);
+                                        },
                                         child: ClipRRect(
                                           child: Banner(
                                             message: 'Ejection',
@@ -234,7 +268,12 @@ class ScoreBoardTO extends StatelessWidget {
                                   ),
                                 ],
                               )),
-                          Expanded(flex: 6, child: Container()),
+                          Expanded(
+                              flex: 6,
+                              child: Container(
+                                child: _cardDisplay(
+                                    context, state.team1, state.cards),
+                              )),
                         ],
                       ),
                     ),
@@ -561,6 +600,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Green Card",
+                                              "Green Card",
+                                              state.team2Players,
+                                              1);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.green,
@@ -578,6 +625,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Yellow Card",
+                                              "Yellow Card",
+                                              state.team2Players,
+                                              2);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.yellow,
@@ -595,6 +650,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Red Card",
+                                              "Red Card",
+                                              state.team2Players,
+                                              3);
+                                        },
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.red,
@@ -612,6 +675,14 @@ class ScoreBoardTO extends StatelessWidget {
                                           right: 2,
                                           left: 2),
                                       child: InkWell(
+                                        onTap: () {
+                                          _showDialogCard(
+                                              context,
+                                              "Red EJECTION Card",
+                                              "Red EJECTION Card",
+                                              state.team2Players,
+                                              4);
+                                        },
                                         child: ClipRRect(
                                           child: Banner(
                                             message: 'Ejection',
@@ -629,7 +700,13 @@ class ScoreBoardTO extends StatelessWidget {
                                   ),
                                 ],
                               )),
-                          Expanded(flex: 6, child: Container())
+                          Expanded(
+                            flex: 6,
+                            child: Container(
+                              child: _cardDisplay(
+                                  context, state.team2, state.cards),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -667,6 +744,150 @@ class ScoreBoardTO extends StatelessWidget {
         ),
         child: Center(
           child: Text(text),
+        ),
+      ),
+    );
+  }
+
+  Widget _cardDisplay(BuildContext context, Team team, List<CardPlayer> cards) {
+    List<CardPlayer> specific = [];
+    for (var card in cards) {
+      if (card.player.player.team.id == team.id) {
+        specific.add(card);
+      }
+    }
+    return GridView.count(
+        crossAxisCount: 4,
+        childAspectRatio: 2 / 3,
+        children: List.generate(specific.length, (index) {
+          switch (specific[index].card) {
+            case 1:
+              return _cardContainer(context, specific[index], Colors.green,
+                  specific[index].timeLeft, index);
+              break;
+            case 2:
+              return _cardContainer(context, specific[index], Colors.yellow,
+                  specific[index].timeLeft, index);
+              break;
+            case 3:
+              return _cardContainer(context, specific[index], Colors.red,
+                  specific[index].timeLeft, index);
+            case 4:
+              return _cardContainerEjection(context, specific[index],
+                  Colors.red, specific[index].timeLeft, index);
+            default:
+              return Center();
+          }
+        }));
+  }
+
+  Widget _cardContainer(BuildContext context, CardPlayer player,
+      MaterialColor colour, int timeLeft, int indexe) {
+    return Expanded(
+      child: Padding(
+        padding:
+            const EdgeInsets.only(bottom: 8.0, top: 8.0, right: 2, left: 2),
+        child: InkWell(
+          onTap: () {
+            _showDialogCardEnd(
+                context,
+                'Remove card?',
+                'Do you want to remove the card of player ' +
+                    player.player.player.number.toString() +
+                    ", " +
+                    player.player.player.firstName +
+                    " " +
+                    player.player.player.lastName +
+                    " of team " +
+                    player.player.player.team.name +
+                    "?",
+                player);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: colour, borderRadius: BorderRadius.circular(5)),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 25,
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5, bottom: 5, left: 5, right: 5),
+                        child: Text(
+                          player.player.player.number.toString(),
+                        ),
+                      )),
+                ),
+                Expanded(
+                  flex: 25,
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5, bottom: 5, left: 5, right: 5),
+                        child: Text(
+                          _printDuration(Duration(seconds: timeLeft)),
+                        ),
+                      )),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _cardContainerEjection(BuildContext context, CardPlayer player,
+      MaterialColor colour, int timeLeft, int indexe) {
+    return Expanded(
+      child: Padding(
+        padding:
+            const EdgeInsets.only(bottom: 8.0, top: 8.0, right: 2, left: 2),
+        child: InkWell(
+          onTap: () {
+            _showDialogCardEnd(
+                context,
+                'Remove card?',
+                'Do you want to remove the card of player ' +
+                    player.player.player.number.toString() +
+                    ", " +
+                    player.player.player.firstName +
+                    " " +
+                    player.player.player.lastName +
+                    " of team " +
+                    player.player.player.team.name +
+                    "?",
+                player);
+          },
+          child: ClipRect(
+            child: Banner(
+              location: BannerLocation.topEnd,
+              message: 'Ejection',
+              child: Container(
+                decoration: BoxDecoration(
+                    color: colour, borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 25,
+                      child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 5, bottom: 5, left: 5, right: 5),
+                            child: Text(
+                              player.player.player.number.toString(),
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -798,6 +1019,44 @@ class ScoreBoardTO extends StatelessWidget {
     ).then((_) => _dialogShowing = false);
   }
 
+  void _showDialogCardEnd(
+      BuildContext contextI, String title, String text, CardPlayer player) {
+    _dialogShowing = true;
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI)
+                      .removeCard(player);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Remove card',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _dialogShowing = false);
+  }
+
   void _showDialogEnd(BuildContext contextI, String title, String text) {
     _dialogShowing = true;
     showDialog(
@@ -834,9 +1093,10 @@ class ScoreBoardTO extends StatelessWidget {
     ).then((_) => _dialogShowing = false);
   }
 
+  bool _infoDialogShowing = false;
   void _showDialogScore(BuildContext contextI, String title, String text,
       List<PlayerGame> players, int team) {
-    _dialogShowing = true;
+    _infoDialogShowing = true;
     showDialog(
       context: contextI,
       builder: (BuildContext context) {
@@ -922,7 +1182,7 @@ class ScoreBoardTO extends StatelessWidget {
           ),
         );
       },
-    ).then((_) => _dialogShowing = false);
+    ).then((_) => _infoDialogShowing = false);
   }
 
   void _showDialogNoScore(BuildContext contextI, String title, String text,
@@ -933,7 +1193,7 @@ class ScoreBoardTO extends StatelessWidget {
         players.add(player);
       }
     }
-    _dialogShowing = true;
+    _infoDialogShowing = true;
     showDialog(
       context: contextI,
       builder: (BuildContext context) {
@@ -1024,6 +1284,95 @@ class ScoreBoardTO extends StatelessWidget {
           ),
         );
       },
-    ).then((_) => _dialogShowing = false);
+    ).then((_) => _infoDialogShowing = false);
+  }
+
+  void _showDialogCard(BuildContext contextI, String title, String text,
+      List<PlayerGame> players, int card) {
+    _infoDialogShowing = true;
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text(title),
+            content: Container(
+              width: MediaQuery.of(contextI).size.width * 0.7,
+              child: GridView.count(
+                crossAxisCount: 5,
+                children: List.generate(players.length, (index) {
+                  return InkWell(
+                    onTap: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .cardPlayer(players[index], card);
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                            child: Column(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                  child: Text('Player ' +
+                                      players[index].player.number.toString())),
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 10, left: 10),
+                                    child: Text(
+                                      players[index].player.firstName +
+                                          " " +
+                                          players[index].player.lastName,
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI)
+                      .addCardNoPlayer(players[0], card);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Player not in list',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _infoDialogShowing = false);
   }
 }

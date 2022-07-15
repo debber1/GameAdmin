@@ -16,6 +16,7 @@ class ScoreboardTOState {
   Team team2;
   List<PlayerGame> team1Players;
   List<PlayerGame> team2Players;
+  List<CardPlayer> cards;
 
   ScoreboardTOState(
       {required this.timer,
@@ -32,7 +33,8 @@ class ScoreboardTOState {
       required this.team1,
       required this.team2,
       required this.team1Players,
-      required this.team2Players});
+      required this.team2Players,
+      required this.cards});
 }
 
 class ScoreboardTOInitial extends ScoreboardTOState {
@@ -54,5 +56,6 @@ class ScoreboardTOInitial extends ScoreboardTOState {
             team2: Team('', Division('', '', true, ''), Country('', '', '', ''),
                 '', '', false, '', ''),
             team1Players: [],
-            team2Players: []);
+            team2Players: [],
+            cards: []);
 }
