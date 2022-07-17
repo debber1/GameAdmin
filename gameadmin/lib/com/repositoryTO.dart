@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:gameadmin/com/networkServiceTO.dart';
 import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
+import 'package:gameadmin/models/return_data.dart';
 
 import '../models/game.dart';
 import '../models/pitch.dart';
@@ -35,5 +36,11 @@ class RepositoryTO {
       players.add(player);
     }
     return players;
+  }
+
+  Future<dynamic> pushResult(ReturnData returnData) async {
+    final status =
+        await networkServiceTO.pushResult(jsonEncode(returnData.toJson()));
+    return status;
   }
 }

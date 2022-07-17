@@ -51,4 +51,17 @@ class NetworkServiceTO {
       return "";
     }
   }
+
+  Future<dynamic> pushResult(String data) async {
+    try {
+      final url = Uri.parse('$baseUrl/gameResult.php');
+      final headers = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      };
+      final response = await post(url, headers: headers, body: data);
+      return response.statusCode;
+    } catch (e) {
+      return (HttpStatus.conflict);
+    }
+  }
 }

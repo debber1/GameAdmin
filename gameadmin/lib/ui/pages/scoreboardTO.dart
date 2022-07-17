@@ -993,10 +993,10 @@ class ScoreBoardTO extends StatelessWidget {
   }
 
   bool _dialogShowing = false;
-  void _showDialogGeneral(BuildContext context, String title, String text) {
+  void _showDialogGeneral(BuildContext contextI, String title, String text) {
     _dialogShowing = true;
     showDialog(
-      context: context,
+      context: contextI,
       builder: (BuildContext context) {
         return Expanded(
           child: AlertDialog(
@@ -1005,6 +1005,10 @@ class ScoreBoardTO extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
+                  //Ugly hack (should be fixed)
+                  if (title == "End of game") {
+                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                  }
                   Navigator.of(context).pop();
                 },
                 child: Text(
@@ -1069,6 +1073,7 @@ class ScoreBoardTO extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
                   Navigator.of(context).pop();
                 },
                 child: Text(

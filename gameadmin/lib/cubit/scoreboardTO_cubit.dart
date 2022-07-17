@@ -8,6 +8,7 @@ import 'package:gameadmin/models/card.dart';
 import 'package:gameadmin/models/game.dart';
 import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
+import 'package:gameadmin/models/return_data.dart';
 import 'package:gameadmin/util/func.dart';
 import 'package:meta/meta.dart';
 import 'package:gameadmin/models/country.dart';
@@ -650,7 +651,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   void timeCards() {
     for (var card in state.cards) {
       if (card.timeLeft == 0) {
-        removeCard(card);
+        endCard(card);
       } else {
         card.timeLeft--;
       }
@@ -677,6 +678,27 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team2Players: state.team2Players,
         cards: state.cards)));
     fixPlayerCard(player);
+  }
+
+  void endCard(CardPlayer player) {
+    state.cards.remove(player);
+    emit((ScoreboardTOState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score1,
+        score2: state.score2,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Players: state.team1Players,
+        team2Players: state.team2Players,
+        cards: state.cards)));
   }
 
   void fixPlayerCard(CardPlayer player) {
@@ -720,5 +742,10 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         }
       }
     }
+  }
+
+  void pushServer() {
+    repositoryTo
+        .pushResult(ReturnData(game, state.team1Players, state.team2Players));
   }
 }
