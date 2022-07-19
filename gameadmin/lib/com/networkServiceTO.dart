@@ -22,16 +22,16 @@ class NetworkServiceTO {
     }
   }
 
-  Future<dynamic> fetchPitch(int pitchNumber) async {
+  Future<dynamic> fetchPitch(String tournamentId) async {
     try {
       final url = Uri.parse('$baseUrl/pitch.php');
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
-      final json = '{"pitchNumber":"' + pitchNumber.toString() + '"}';
+      final json = '{"tournamentId":"' + tournamentId + '"}';
       final response = await post(url, headers: headers, body: json);
       final String rep = response.body;
-      return (jsonDecode(response.body));
+      return (rep);
     } catch (e) {
       return "";
     }

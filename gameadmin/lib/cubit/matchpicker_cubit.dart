@@ -13,21 +13,18 @@ part 'matchpicker_state.dart';
 
 class MatchPickerCubit extends Cubit<MatchPickerState> {
   final RepositoryTO repositoryTO;
+  final Pitch pitch;
 
-  MatchPickerCubit(this.repositoryTO) : super(MatchPickerInitial());
+  MatchPickerCubit(this.repositoryTO, this.pitch) : super(MatchPickerInitial());
 
   void fetchGames(String pitchId) {
     repositoryTO.fetchGames(pitchId).then((games) {
-      emit(MatchPickerState(
-          pitchNumber: state.pitchNumber, pitch: state.pitch, games: games));
+      emit(MatchPickerState(pitch: state.pitch, games: games));
     });
   }
 
   void fetchPitch() {
-    repositoryTO.fetchPitch(state.pitchNumber).then((pitch) {
-      emit(MatchPickerState(
-          pitchNumber: state.pitchNumber, pitch: pitch, games: state.games));
-      fetchGames(pitch.id);
-    });
+    emit(MatchPickerState(pitch: pitch, games: state.games));
+    fetchGames(state.pitch.id);
   }
 }

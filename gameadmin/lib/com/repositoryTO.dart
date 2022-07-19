@@ -20,9 +20,13 @@ class RepositoryTO {
     return games;
   }
 
-  Future<Pitch> fetchPitch(int pitchNumber) async {
-    final rawPitch = await networkServiceTO.fetchPitch(pitchNumber);
-    return Pitch.fromJson(rawPitch);
+  Future<List<Pitch>> fetchPitch(String tournamentID) async {
+    final rawPitch = await networkServiceTO.fetchPitch(tournamentID);
+    final List<dynamic> parsedJson = jsonDecode(rawPitch);
+    final List<Pitch> pitches = parsedJson != null
+        ? parsedJson.map((e) => Pitch.fromJson(e)).toList()
+        : <Pitch>[];
+    return pitches;
   }
 
   Future<List<List<PlayerGame>>> fetchPlayers(List<String> ids) async {

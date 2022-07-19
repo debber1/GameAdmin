@@ -6,7 +6,9 @@ import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/cubit/matchpicker_cubit.dart';
 import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/cubit/scoreboard_cubit.dart';
+import 'package:gameadmin/cubit/settings_cubit.dart';
 import 'package:gameadmin/models/game.dart';
+import 'package:gameadmin/models/pitch.dart';
 import 'package:gameadmin/ui/pages/matchpicker.dart';
 import 'package:gameadmin/ui/pages/scoreboard.dart';
 import 'package:gameadmin/ui/pages/scoreboardTO.dart';
@@ -19,7 +21,11 @@ class GameAdminRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case "/":
-        return MaterialPageRoute(builder: (_) => Settings());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (BuildContext context) => SettingsCubit(repositoryTO),
+                  child: Settings(),
+                ));
       case gameAdminRoute:
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
@@ -27,10 +33,11 @@ class GameAdminRouter {
                   child: ScoreBoard(),
                 ));
       case matchPickerRoute:
+        final pitch = settings.arguments as Pitch;
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                   create: (BuildContext context) =>
-                      MatchPickerCubit(repositoryTO),
+                      MatchPickerCubit(repositoryTO, pitch),
                   child: MatchPicker(),
                 ));
       case tournamentOrganiserRoute:
