@@ -5,13 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/cubit/settings_cubit.dart';
 import 'package:gameadmin/models/pitch.dart';
-import 'package:gameadmin/ui/pages/scoreboard.dart';
 import 'package:gameadmin/util/constants.dart';
-
-import '../../cubit/scoreboard_cubit.dart';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -68,8 +64,8 @@ class Settings extends StatelessWidget {
                     child: InkWell(
                       onTap: () => _showDialogPitch(
                         context,
-                        'Pitch?',
-                        'Pitch?',
+                        'Pitch',
+                        'Pitch',
                         state.pitches,
                       ),
                       child: Container(
@@ -129,8 +125,7 @@ class Settings extends StatelessWidget {
                             child: Column(
                           children: [
                             Expanded(
-                              child: Center(
-                                  child: Text('Pitch ' + pitches[index].name)),
+                              child: Center(child: Text(pitches[index].name)),
                             ),
                           ],
                         )),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/models/card.dart';
 import 'package:gameadmin/models/game.dart';
@@ -10,7 +9,6 @@ import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
 import 'package:gameadmin/models/return_data.dart';
 import 'package:gameadmin/util/func.dart';
-import 'package:meta/meta.dart';
 import 'package:gameadmin/models/country.dart';
 import 'package:gameadmin/models/division.dart';
 import 'package:gameadmin/models/team.dart';
@@ -129,7 +127,6 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
     if (!state.timerRunning) {
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        emit(state);
         if (state.timerShouldRun) {
           if (state.timer == 0 && !state.breakActive && state.period == 1) {
             startBreak();
@@ -140,11 +137,12 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
             return;
           }
           if (state.timer == 0 && state.period >= 2) {
-            //TODO: Implement what needs to happen at the end of a match.
             pauseTimer();
             return;
           }
-          timeCards();
+          if (!state.breakActive) {
+            timeCards();
+          }
           emit(ScoreboardTOState(
               timer: state.timer - 1,
               shotclock: state.shotclock,

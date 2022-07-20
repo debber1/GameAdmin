@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
-import 'package:gameadmin/cubit/scoreboard_cubit.dart';
 import 'package:gameadmin/models/card.dart';
 import 'package:gameadmin/models/player_game.dart';
 import 'package:gameadmin/models/team.dart';
