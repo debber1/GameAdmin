@@ -480,8 +480,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         shotclockShouldRun: false,
         team1: state.team2,
         team2: state.team1,
-        team1Players: state.team1Players,
-        team2Players: state.team2Players,
+        team1Players: state.team2Players,
+        team2Players: state.team1Players,
         cards: state.cards));
     fixGoal();
   }
