@@ -425,6 +425,21 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void resetGame() {
+    //Removing all the cards and goals
+    for (var player in state.team1Players) {
+      player.green = 0;
+      player.red = 0;
+      player.yellow = 0;
+      player.goals = 0;
+    }
+    for (var player in state.team2Players) {
+      player.green = 0;
+      player.red = 0;
+      player.yellow = 0;
+      player.goals = 0;
+    }
+    state.cards = [];
+
     if (state.breakActive == true || state.period == 2) {
       emit(ScoreboardTOState(
           timer: state.periodLength * 60,
