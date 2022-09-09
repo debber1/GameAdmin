@@ -54,10 +54,10 @@ class Player {
     return {
       'id': id,
       'team': team.toJson(),
-      'number': number,
+      'number': number.toString(),
       'firstName': firstName,
       'lastName': lastName,
-      'captain': captain,
+      'captain': captain.toString(),
     };
   }
 

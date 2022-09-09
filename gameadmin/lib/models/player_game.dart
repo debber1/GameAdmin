@@ -18,9 +18,13 @@ class PlayerGame {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "id" is missing');
     }
-
-    final goals = 0;
-
+    var goals;
+    try {
+      goals = int.parse(data['goals']) as int;
+    } catch (e) {}
+    if (goals == null) {
+      goals = 0;
+    }
     final playerData = data['player'] as dynamic?;
     final player = playerData != null
         ? Player.fromJson(playerData)
@@ -64,11 +68,11 @@ class PlayerGame {
     return {
       'id': id,
       'player': player.toJson(),
-      'goals': goals,
-      'green': green,
-      'yellow': yellow,
-      'red': red,
-      'redEjection': redEjection,
+      'goals': goals.toString(),
+      'green': green.toString(),
+      'yellow': yellow.toString(),
+      'red': red.toString(),
+      'redEjection': redEjection.toString(),
     };
   }
 

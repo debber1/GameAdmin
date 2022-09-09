@@ -45,8 +45,8 @@ class Pitch {
     return {
       'id': id,
       'name': name,
-      'shotClock': shotClock,
-      'finalePitch': finalePitch,
+      'shotClock': shotClock.toString(),
+      'finalePitch': finalePitch.toString(),
       'pitchResponsable': pitchResponsable,
     };
   }

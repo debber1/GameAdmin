@@ -45,7 +45,7 @@ class ReturnData {
     final List<PlayerGame> team1 = parsedJson1 != null
         ? parsedJson1.map((e) => PlayerGame.fromJson(e)).toList()
         : <PlayerGame>[];
-    final rawPlayers2 = data['team1'] as String;
+    final rawPlayers2 = data['team2'] as String;
     final List<dynamic> parsedJson2 = jsonDecode(rawPlayers2);
     final List<PlayerGame> team2 = parsedJson2 != null
         ? parsedJson2.map((e) => PlayerGame.fromJson(e)).toList()

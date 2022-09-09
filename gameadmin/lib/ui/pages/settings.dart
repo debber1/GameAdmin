@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gameadmin/com/localStorage.dart';
 import 'package:gameadmin/cubit/settings_cubit.dart';
 import 'package:gameadmin/models/pitch.dart';
 import 'package:gameadmin/util/constants.dart';
@@ -27,6 +28,19 @@ class Settings extends StatelessWidget {
           preferredSize: Size.fromHeight(35.0),
           child: AppBar(
             title: Text('GameAdmin - github.com/debber1/GameAdmin'),
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                onSelected: (choice) => handleClick(choice, context),
+                itemBuilder: (BuildContext context) {
+                  return {'Reset File'}.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
           ),
         ),
         body: BlocBuilder<SettingsCubit, SettingsState>(
@@ -150,5 +164,13 @@ class Settings extends StatelessWidget {
         );
       },
     ).then((_) => _infoDialogShowing = false);
+  }
+
+  void handleClick(String value, BuildContext context) {
+    switch (value) {
+      case 'Reset File':
+        deleteData();
+        break;
+    }
   }
 }

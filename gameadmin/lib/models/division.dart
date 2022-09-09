@@ -37,7 +37,7 @@ class Division {
     return {
       'id': id,
       'name': name,
-      'shotClock': shotClock,
+      'shotClock': shotClock.toString(),
       'shortName': shortName,
     };
   }

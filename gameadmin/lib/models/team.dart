@@ -69,7 +69,7 @@ class Team {
       'country': country.toJson(),
       'name': name,
       'language': language,
-      'forfaitTeam': forfaitTeam,
+      'forfaitTeam': forfaitTeam.toString(),
       'pfdColour1': pfdColour1,
       'pfdColour2': pfdColour2,
     };
