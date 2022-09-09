@@ -1008,6 +1008,8 @@ class ScoreBoardTO extends StatelessWidget {
                   if (title == "End of game") {
                     BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
                   }
+                  Navigator.pop(contextI);
+                  Navigator.pop(context);
                   Navigator.of(context).pop();
                 },
                 child: Text(
@@ -1073,6 +1075,8 @@ class ScoreBoardTO extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                  Navigator.pop(contextI);
+                  Navigator.pop(context);
                   Navigator.of(context).pop();
                 },
                 child: Text(
