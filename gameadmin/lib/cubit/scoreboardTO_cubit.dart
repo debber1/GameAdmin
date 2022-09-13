@@ -28,24 +28,31 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   ScoreboardTOCubit(this.game, this.repositoryTo)
       : super(ScoreboardTOInitial());
   void setstate() {
-    emit(ScoreboardTOState(
-        timer: state.timer,
-        shotclock: state.shotclock,
-        breakLength: state.breakLength,
-        periodLength: state.periodLength,
-        score1: game.scoreTeam1,
-        score2: game.scoreTeam2,
-        period: state.period,
-        timerRunning: state.timerRunning,
-        timerShouldRun: state.timerShouldRun,
-        breakActive: state.breakActive,
-        shotclockShouldRun: state.shotclockShouldRun,
-        team1: game.team1,
-        team2: game.team2,
-        team1Players: state.team1Players,
-        team2Players: state.team2Players,
-        cards: state.cards,
-        gameData: game));
+    recall(game.id).then((saveState) {
+      if (saveState.gameData.id == '') {
+        emit(ScoreboardTOState(
+            timer: state.timer,
+            shotclock: state.shotclock,
+            breakLength: state.breakLength,
+            periodLength: state.periodLength,
+            score1: game.scoreTeam1,
+            score2: game.scoreTeam2,
+            period: state.period,
+            timerRunning: state.timerRunning,
+            timerShouldRun: state.timerShouldRun,
+            breakActive: state.breakActive,
+            shotclockShouldRun: state.shotclockShouldRun,
+            team1: game.team1,
+            team2: game.team2,
+            team1Players: state.team1Players,
+            team2Players: state.team2Players,
+            cards: state.cards,
+            gameData: game));
+        fetchPlayers();
+      } else {
+        emit(saveState);
+      }
+    });
   }
 
   void incrementScore(int team) {

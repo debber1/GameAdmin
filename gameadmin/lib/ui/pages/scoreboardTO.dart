@@ -16,7 +16,6 @@ class ScoreBoardTO extends StatelessWidget {
     BlocProvider.of<ScoreboardTOCubit>(context).shotclockTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).mainTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).setstate();
-    BlocProvider.of<ScoreboardTOCubit>(context).fetchPlayers();
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
