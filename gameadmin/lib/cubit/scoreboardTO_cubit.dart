@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:gameadmin/com/localRepository.dart';
 import 'package:gameadmin/com/localStorage.dart';
 import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/models/card.dart';
@@ -152,6 +153,10 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           }
           if (!state.breakActive) {
             timeCards();
+          }
+          //Backup every 10 sec in case of a crash.
+          if (state.timer % 10 == 0) {
+            backup(state);
           }
           emit(ScoreboardTOState(
               timer: state.timer - 1,
@@ -570,7 +575,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team2Players: players[1],
           cards: state.cards,
           gameData: state.gameData));
-      writeData(state);
+      backup(state);
     });
   }
 

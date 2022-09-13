@@ -17,13 +17,11 @@ Future<File> get _localFile async {
   return File('$path/data.txt');
 }
 
-Future<File> writeData(ScoreboardTOState saveState) async {
+Future<File> writeData(List<ScoreboardTOState> saveState) async {
   final file = await _localFile;
-  final List<ScoreboardTOState> saveStates = await readData();
-  saveStates.add(saveState);
   // Write the file
   return file
-      .writeAsString(jsonEncode(saveStates.map((e) => e.toJson()).toList()));
+      .writeAsString(jsonEncode(saveState.map((e) => e.toJson()).toList()));
 }
 
 Future<List<ScoreboardTOState>> readData() async {
