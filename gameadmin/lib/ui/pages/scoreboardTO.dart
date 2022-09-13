@@ -1007,9 +1007,9 @@ class ScoreBoardTO extends StatelessWidget {
                   //Ugly hack (should be fixed)
                   if (title == "End of game") {
                     BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                    Navigator.pop(contextI);
+                    Navigator.pop(context);
                   }
-                  Navigator.pop(contextI);
-                  Navigator.pop(context);
                   Navigator.of(context).pop();
                 },
                 child: Text(
