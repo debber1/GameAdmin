@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:gameadmin/models/country.dart';
 import 'package:gameadmin/models/division.dart';
+import 'package:gameadmin/models/event_log.dart';
 import 'package:gameadmin/models/game.dart';
 import 'package:gameadmin/models/pitch.dart';
 import 'package:gameadmin/models/player_game.dart';
@@ -11,6 +12,7 @@ class ReturnData {
   Game game;
   List<PlayerGame> team1;
   List<PlayerGame> team2;
+  List<EventLog> eventLogs;
 
   factory ReturnData.fromJson(Map<String, dynamic> data) {
     final gameData = data['game'] as dynamic?;
@@ -50,8 +52,12 @@ class ReturnData {
     final List<PlayerGame> team2 = parsedJson2 != null
         ? parsedJson2.map((e) => PlayerGame.fromJson(e)).toList()
         : <PlayerGame>[];
-
-    return ReturnData(game, team1, team2);
+    final eventLogsData = data['eventLogs'] as dynamic?;
+    final List<dynamic> eventLogsParsed = eventLogsData;
+    final List<EventLog> eventLogs = eventLogsParsed != null
+        ? eventLogsParsed.map(((e) => EventLog.fromJson(e))).toList()
+        : <EventLog>[];
+    return ReturnData(game, team1, team2, eventLogs);
   }
 
   Map<String, dynamic> toJson() {
@@ -59,8 +65,9 @@ class ReturnData {
       'game': game.toJson(),
       'team1': team1.map((e) => e.toJson()).toList(),
       'team2': team2.map((e) => e.toJson()).toList(),
+      'eventLogs': eventLogs.map((e) => e.toJson()).toList()
     };
   }
 
-  ReturnData(this.game, this.team1, this.team2);
+  ReturnData(this.game, this.team1, this.team2, this.eventLogs);
 }

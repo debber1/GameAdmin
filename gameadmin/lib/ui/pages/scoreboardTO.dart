@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/scoreboardTO_cubit.dart';
 import 'package:gameadmin/models/card.dart';
+import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
 import 'package:gameadmin/models/team.dart';
 
@@ -1004,7 +1005,7 @@ class ScoreBoardTO extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   //Ugly hack (should be fixed)
-                  if (title == "End of game") {
+                  if (title == "End of the game") {
                     BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
                     Navigator.pop(contextI);
                     Navigator.pop(context);
@@ -1178,6 +1179,10 @@ class ScoreBoardTO extends StatelessWidget {
                 onPressed: () {
                   BlocProvider.of<ScoreboardTOCubit>(contextI)
                       .incrementScore(team);
+                  BlocProvider.of<ScoreboardTOCubit>(contextI).logEvent(
+                      1,
+                      "Unknown player scored a goal",
+                      Player('', players[0].player.team, -1, '', '', false));
                   Navigator.of(context).pop();
                 },
                 child: Text(

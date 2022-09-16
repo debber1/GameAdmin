@@ -8,6 +8,7 @@ import 'package:gameadmin/com/localRepository.dart';
 import 'package:gameadmin/com/localStorage.dart';
 import 'package:gameadmin/com/repositoryTO.dart';
 import 'package:gameadmin/models/card.dart';
+import 'package:gameadmin/models/event_log.dart';
 import 'package:gameadmin/models/game.dart';
 import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
@@ -47,7 +48,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
             team1Players: state.team1Players,
             team2Players: state.team2Players,
             cards: state.cards,
-            gameData: game));
+            gameData: game,
+            eventLogs: state.eventLogs));
         fetchPlayers();
       } else {
         emit(saveState);
@@ -74,7 +76,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     } else if (team == 2 && state.score2 != 99) {
       emit(ScoreboardTOState(
           timer: state.timer,
@@ -93,7 +96,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
     fixGoal();
   }
@@ -117,7 +121,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     } else if (team == 2 && state.score2 != 0) {
       emit(ScoreboardTOState(
           timer: state.timer,
@@ -136,7 +141,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
     fixGoal();
   }
@@ -182,7 +188,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
               team1Players: state.team1Players,
               team2Players: state.team2Players,
               cards: state.cards,
-              gameData: state.gameData));
+              gameData: state.gameData,
+              eventLogs: state.eventLogs));
         }
       });
     }
@@ -214,7 +221,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
                 team1Players: state.team1Players,
                 team2Players: state.team2Players,
                 cards: state.cards,
-                gameData: state.gameData));
+                gameData: state.gameData,
+                eventLogs: state.eventLogs));
           }
         }
       });
@@ -239,7 +247,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void pauseTimer() {
@@ -260,7 +269,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void resetTimer() {
@@ -283,7 +293,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     } else {
       emit(ScoreboardTOState(
           timer: state.periodLength * 60,
@@ -302,7 +313,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
   }
 
@@ -325,7 +337,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
   }
 
@@ -347,7 +360,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team2Players,
         team2Players: state.team1Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
     fixGoal();
   }
 
@@ -369,7 +383,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
     fixGoal();
   }
 
@@ -391,7 +406,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void pauseShotclock() {
@@ -412,7 +428,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void resetShotclock() {
@@ -433,7 +450,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void changeShotclock(int amount) {
@@ -455,7 +473,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
   }
 
@@ -474,6 +493,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       player.goals = 0;
     }
     state.cards = [];
+    state.eventLogs = [];
 
     if (state.breakActive == true || state.period == 2) {
       emit(ScoreboardTOState(
@@ -493,7 +513,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team2Players,
           team2Players: state.team1Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     } else {
       emit(ScoreboardTOState(
           timer: state.periodLength * 60,
@@ -512,7 +533,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: state.team1Players,
           team2Players: state.team2Players,
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
     }
     fixGoal();
   }
@@ -535,7 +557,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team2Players,
         team2Players: state.team1Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
     fixGoal();
   }
 
@@ -557,7 +580,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team2Players,
         team2Players: state.team1Players,
         cards: state.cards,
-        gameData: state.gameData));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
     fixGoal();
   }
 
@@ -581,7 +605,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           team1Players: players[0],
           team2Players: players[1],
           cards: state.cards,
-          gameData: state.gameData));
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
       backup(state);
     });
   }
@@ -597,6 +622,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void goalPlayer(PlayerGame player) {
+    logEvent(1, "Scoring a goal", player.player);
     for (var playerlist in state.team1Players) {
       if (playerlist == player) {
         playerlist.goals++;
@@ -610,6 +636,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void noGoalPlayer(PlayerGame player) {
+    logEvent(2, "Removing scored goal", player.player);
     for (var playerlist in state.team1Players) {
       if (playerlist == player) {
         playerlist.goals--;
@@ -627,15 +654,19 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       if (playerlist == player) {
         switch (card) {
           case 1:
+            logEvent(3, "Adding green card", player.player);
             playerlist.green++;
             break;
           case 2:
+            logEvent(5, "Adding yellow card", player.player);
             playerlist.yellow++;
             break;
           case 3:
+            logEvent(7, "Adding red card", player.player);
             playerlist.red++;
             break;
           case 4:
+            logEvent(9, "Adding red ejection card", player.player);
             playerlist.redEjection++;
             break;
           default:
@@ -646,15 +677,19 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       if (playerlist == player) {
         switch (card) {
           case 1:
+            logEvent(3, "Adding green card", player.player);
             playerlist.green++;
             break;
           case 2:
+            logEvent(5, "Adding yellow card", player.player);
             playerlist.yellow++;
             break;
           case 3:
+            logEvent(7, "Adding red card", player.player);
             playerlist.red++;
             break;
           case 4:
+            logEvent(9, "Adding red ejection card", player.player);
             playerlist.redEjection++;
             break;
           default:
@@ -675,6 +710,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         0,
         0);
     addCard(temp, card);
+    logEvent(card * 2 + 1, "Adding card for non existent player", temp.player);
   }
 
   void addCard(PlayerGame player, int card) {
@@ -700,7 +736,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData)));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs)));
   }
 
   void timeCards() {
@@ -732,7 +769,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData)));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs)));
     fixPlayerCard(player);
   }
 
@@ -755,7 +793,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         team1Players: state.team1Players,
         team2Players: state.team2Players,
         cards: state.cards,
-        gameData: state.gameData)));
+        gameData: state.gameData,
+        eventLogs: state.eventLogs)));
   }
 
   void fixPlayerCard(CardPlayer player) {
@@ -764,15 +803,19 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         if (playerlist.id == player.player.id) {
           switch (player.card) {
             case 1:
+              logEvent(4, "Removing green card", player.player.player);
               playerlist.green--;
               break;
             case 2:
+              logEvent(6, "Removing yellow card", player.player.player);
               playerlist.yellow--;
               break;
             case 3:
+              logEvent(8, "Removing red card", player.player.player);
               playerlist.red--;
               break;
             case 4:
+              logEvent(10, "Removing red ejection card", player.player.player);
               playerlist.redEjection--;
               break;
             default:
@@ -783,15 +826,19 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         if (playerlist.id == player.player.id) {
           switch (player.card) {
             case 1:
+              logEvent(4, "Removing green card", player.player.player);
               playerlist.green--;
               break;
             case 2:
+              logEvent(6, "Removing yellow card", player.player.player);
               playerlist.yellow--;
               break;
             case 3:
+              logEvent(8, "Removing red card", player.player.player);
               playerlist.red--;
               break;
             case 4:
+              logEvent(10, "Removing red ejection card", player.player.player);
               playerlist.redEjection--;
               break;
             default:
@@ -802,7 +849,13 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void pushServer() {
-    repositoryTo
-        .pushResult(ReturnData(game, state.team1Players, state.team2Players));
+    repositoryTo.pushResult(ReturnData(
+        game, state.team1Players, state.team2Players, state.eventLogs));
+    backup(state);
+  }
+
+  void logEvent(int eventCode, String description, Player player) {
+    state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(),
+        eventCode, description, player));
   }
 }

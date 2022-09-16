@@ -18,6 +18,7 @@ class ScoreboardTOState {
   List<PlayerGame> team2Players;
   List<CardPlayer> cards;
   Game gameData;
+  List<EventLog> eventLogs;
 
   ScoreboardTOState(
       {required this.timer,
@@ -36,7 +37,8 @@ class ScoreboardTOState {
       required this.team1Players,
       required this.team2Players,
       required this.cards,
-      required this.gameData});
+      required this.gameData,
+      required this.eventLogs});
 
   factory ScoreboardTOState.fromJson(Map<String, dynamic> data) {
     final timer = data['timer'];
@@ -102,6 +104,11 @@ class ScoreboardTOState {
             '',
             '',
             '');
+    final eventLogsData = data['eventLogs'] as dynamic?;
+    final List<dynamic> eventLogsParsed = eventLogsData;
+    final List<EventLog> eventLogs = eventLogsParsed != null
+        ? eventLogsParsed.map(((e) => EventLog.fromJson(e))).toList()
+        : <EventLog>[];
     return ScoreboardTOState(
         timer: timer,
         shotclock: shotclock,
@@ -119,7 +126,8 @@ class ScoreboardTOState {
         team1Players: team1Players,
         team2Players: team2Players,
         cards: cards,
-        gameData: gameData);
+        gameData: gameData,
+        eventLogs: eventLogs);
   }
   Map<String, dynamic> toJson() {
     return {
@@ -139,7 +147,8 @@ class ScoreboardTOState {
       'team1Players': team1Players.map((e) => e.toJson()).toList(),
       'team2Players': team2Players.map((e) => e.toJson()).toList(),
       'cards': cards.map((e) => e.toJson()).toList(),
-      'gameData': gameData.toJson()
+      'gameData': gameData.toJson(),
+      'eventLogs': eventLogs.map((e) => e.toJson()).toList()
     };
   }
 }
@@ -147,10 +156,10 @@ class ScoreboardTOState {
 class ScoreboardTOInitial extends ScoreboardTOState {
   ScoreboardTOInitial()
       : super(
-            timer: 600,
+            timer: 6,
             shotclock: 60,
-            breakLength: 2,
-            periodLength: 10,
+            breakLength: 1,
+            periodLength: 1,
             score1: 0,
             score2: 0,
             period: 1,
@@ -187,5 +196,6 @@ class ScoreboardTOInitial extends ScoreboardTOState {
                 0,
                 '',
                 '',
-                ''));
+                ''),
+            eventLogs: []);
 }
