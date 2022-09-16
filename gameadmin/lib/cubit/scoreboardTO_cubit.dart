@@ -858,4 +858,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
     state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(),
         eventCode, description, player));
   }
+
+  ScoreboardTOState giveState() {
+    return state;
+  }
 }

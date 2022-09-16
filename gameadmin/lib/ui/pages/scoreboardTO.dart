@@ -37,7 +37,8 @@ class ScoreBoardTO extends StatelessWidget {
                     'Reset timer',
                     'Reset game',
                     'Switch sides',
-                    'Back to settings'
+                    'Back to settings',
+                    'Game sheet'
                   }.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
@@ -939,6 +940,9 @@ class ScoreBoardTO extends StatelessWidget {
       case 'Back to settings':
         Navigator.pop(context);
         break;
+      case 'Game sheet':
+        _showGameSheet(context);
+        break;
     }
   }
 
@@ -1014,6 +1018,103 @@ class ScoreBoardTO extends StatelessWidget {
                 },
                 child: Text(
                   'OK',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((_) => _dialogShowing = false);
+  }
+
+  void _showGameSheet(BuildContext contextI) {
+    _dialogShowing = true;
+    ScoreboardTOState state =
+        BlocProvider.of<ScoreboardTOCubit>(contextI).giveState();
+    showDialog(
+      context: contextI,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text("Game sheet"),
+            content: Container(
+              width: MediaQuery.of(contextI).size.width * 0.7,
+              child: Column(children: [
+                Expanded(
+                  flex: 1,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(state.team1.name +
+                        " " +
+                        state.score1.toString() +
+                        "-" +
+                        state.score2.toString() +
+                        " " +
+                        state.team2.name),
+                  ),
+                ),
+                Expanded(
+                    flex: 5,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.eventLogs.length,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      itemBuilder: (BuildContext ontext, int index) {
+                        return Container(
+                          height: 25,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(state
+                                            .eventLogs[index].player.team.name +
+                                        ", " +
+                                        state.eventLogs[index].player.number
+                                            .toString() +
+                                        ": ")),
+                              ),
+                              Expanded(child: Container(), flex: 1),
+                              Expanded(
+                                flex: 4,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text("(code: " +
+                                        state.eventLogs[index].eventCode
+                                            .toString() +
+                                        ")")),
+                              ),
+                              Expanded(child: Container(), flex: 1),
+                              Expanded(
+                                flex: 8,
+                                child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                        state.eventLogs[index].description)),
+                              ),
+                              Expanded(child: Container(), flex: 1),
+                            ],
+                          ),
+                        );
+                      },
+                    ))
+              ]),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Send game again',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
