@@ -156,10 +156,10 @@ class ScoreboardTOState {
 class ScoreboardTOInitial extends ScoreboardTOState {
   ScoreboardTOInitial()
       : super(
-            timer: 6,
+            timer: 600,
             shotclock: 60,
-            breakLength: 1,
-            periodLength: 1,
+            breakLength: 2,
+            periodLength: 10,
             score1: 0,
             score2: 0,
             period: 1,
