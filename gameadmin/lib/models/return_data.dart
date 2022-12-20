@@ -21,7 +21,7 @@ class ReturnData {
         : Game(
             '',
             '',
-            Pitch('', '', true, true, ''),
+            Pitch('', '', true, true, '', ''),
             Division('', '', true, ''),
             Team('', Division('', '', true, ''), Country('', '', '', ''), '',
                 '', false, '', ''),

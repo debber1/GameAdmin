@@ -84,7 +84,7 @@ class ScoreboardTOState {
         : Game(
             '',
             '',
-            Pitch('', '', true, true, ''),
+            Pitch('', '', true, true, '', ''),
             Division('', '', true, ''),
             Team('', Division('', '', true, ''), Country('', '', '', ''), '',
                 '', false, '', ''),
@@ -177,7 +177,7 @@ class ScoreboardTOInitial extends ScoreboardTOState {
             gameData: Game(
                 '',
                 '',
-                Pitch('', '', true, true, ''),
+                Pitch('', '', true, true, '', ''),
                 Division('', '', true, ''),
                 Team('', Division('', '', true, ''), Country('', '', '', ''),
                     '', '', false, '', ''),

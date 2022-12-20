@@ -43,7 +43,7 @@ class Game {
     final pitchData = data['pitch'] as dynamic?;
     final pitch = pitchData != null
         ? Pitch.fromJson(pitchData)
-        : Pitch('', '', true, true, '');
+        : Pitch('', '', true, true, '', '');
 
     final divisionData = data['division'] as dynamic?;
     final division = divisionData != null

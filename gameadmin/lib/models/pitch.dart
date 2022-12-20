@@ -6,6 +6,7 @@ class Pitch {
   bool shotClock;
   bool finalePitch;
   String? pitchResponsable;
+  String? scoreIP;
   factory Pitch.fromJson(Map<String, dynamic> data) {
     final id = data['id'] as String;
     if (id == null) {
@@ -37,8 +38,13 @@ class Pitch {
       throw UnsupportedError(
           'Invalid data: $data -> "pitchResponsable" is missing');
     }
+    final scoreIP = data['scoreIP'] as String;
+    if (pitchResponsable == null) {
+      // Data vallidation
+      throw UnsupportedError('Invalid data: $data -> "scoreIP" is missing');
+    }
 
-    return Pitch(id, name, shotClock, finalePitch, pitchResponsable);
+    return Pitch(id, name, shotClock, finalePitch, pitchResponsable, scoreIP);
   }
 
   Map<String, dynamic> toJson() {
@@ -48,9 +54,10 @@ class Pitch {
       'shotClock': shotClock.toString(),
       'finalePitch': finalePitch.toString(),
       'pitchResponsable': pitchResponsable,
+      'scoreIP': scoreIP,
     };
   }
 
   Pitch(this.id, this.name, this.shotClock, this.finalePitch,
-      this.pitchResponsable);
+      this.pitchResponsable, this.scoreIP);
 }

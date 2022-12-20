@@ -8,5 +8,6 @@ class MatchPickerState {
 }
 
 class MatchPickerInitial extends MatchPickerState {
-  MatchPickerInitial() : super(pitch: Pitch('', '', true, true, ''), games: []);
+  MatchPickerInitial()
+      : super(pitch: Pitch('', '', true, true, '', ''), games: []);
 }
