@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:gameadmin/com/networkServiceTO.dart';
+import 'package:gameadmin/com/repositorySB.dart';
 import 'package:gameadmin/models/player_game.dart';
 import 'package:gameadmin/models/return_data.dart';
 
@@ -45,5 +46,12 @@ class RepositoryTO {
     final status =
         await networkServiceTO.pushResult(jsonEncode(returnData.toJson()));
     return status;
+  }
+
+  void syncScoreBoard(int playTime, int shotTime, int scoreBlue, int scoreRed,
+      Pitch pitch) async {
+    networkServiceTO.syncScoreBoard(
+        jsonEncode(buildJson(playTime, shotTime, scoreBlue, scoreRed)),
+        pitch.scoreIP);
   }
 }
