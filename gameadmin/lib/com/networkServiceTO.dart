@@ -69,7 +69,7 @@ class NetworkServiceTO {
     if (scoreIP != null) {
       try {
         TcpSocketConnection tcpSocketConnection =
-            TcpSocketConnection("192.168.1.130", 10000);
+            TcpSocketConnection(scoreIP, 10000);
         if (await tcpSocketConnection.canConnect(5000, attempts: 3)) {
           //check if it's possible to connect to the endpoint
           final connection = await tcpSocketConnection
