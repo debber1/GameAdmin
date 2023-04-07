@@ -168,12 +168,14 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
             timeCards();
           }
           // Backup every 10 sec in case of a crash
-          // Send the game data to the scoreboard
           if (state.timer % 10 == 0) {
             backup(state);
-            repositoryTo.syncScoreBoard(state.timer, state.shotclock,
-                state.score1, state.score2, state.gameData.pitch);
           }
+
+          // Send the game data to the scoreboard
+          repositoryTo.syncScoreBoard(state.timer, state.shotclock,
+              state.score1, state.score2, state.gameData.pitch);
+
           emit(ScoreboardTOState(
               timer: state.timer - 1,
               shotclock: state.shotclock,
