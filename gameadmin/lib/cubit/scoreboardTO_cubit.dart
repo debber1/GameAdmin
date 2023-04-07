@@ -26,8 +26,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   final Game game;
   final RepositoryTO repositoryTo;
 
-  ScoreboardTOCubit(this.game, this.repositoryTo)
-      : super(ScoreboardTOInitial());
+  ScoreboardTOCubit(this.game, this.repositoryTo) : super(ScoreboardTOInitial());
   void setstate() {
     recall(game.id).then((saveState) {
       if (saveState.gameData.id == '') {
@@ -51,8 +50,10 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
             gameData: game,
             eventLogs: state.eventLogs));
         fetchPlayers();
+        repositoryTo.initTcpConnection(state.gameData.pitch);
       } else {
         emit(saveState);
+        repositoryTo.initTcpConnection(state.gameData.pitch);
       }
     });
   }
@@ -173,9 +174,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           }
 
           // Send the game data to the scoreboard
-          repositoryTo.syncScoreBoard(state.timer, state.shotclock,
-              state.score1, state.score2, state.gameData.pitch);
-
+          //repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, state.gameData.pitch);
           emit(ScoreboardTOState(
               timer: state.timer - 1,
               shotclock: state.shotclock,
@@ -196,6 +195,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
               gameData: state.gameData,
               eventLogs: state.eventLogs));
         }
+        repositoryTo.statusUpdateScoreBoard(state.timer, state.shotclock, state.score1, state.score2);
       });
     }
   }
@@ -705,15 +705,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void addCardNoPlayer(PlayerGame player, int card) {
-    PlayerGame temp = PlayerGame(
-        "",
-        Player("", player.player.team, -1, getRandomString(1),
-            getRandomString(1), false),
-        0,
-        0,
-        0,
-        0,
-        0);
+    PlayerGame temp = PlayerGame("", Player("", player.player.team, -1, getRandomString(1), getRandomString(1), false), 0, 0, 0, 0, 0);
     addCard(temp, card);
     logEvent(card * 2 + 1, "Adding card for non existent player", temp.player);
   }
@@ -854,14 +846,12 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void pushServer() {
-    repositoryTo.pushResult(ReturnData(
-        game, state.team1Players, state.team2Players, state.eventLogs));
+    repositoryTo.pushResult(ReturnData(game, state.team1Players, state.team2Players, state.eventLogs));
     backup(state);
   }
 
   void logEvent(int eventCode, String description, Player player) {
-    state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(),
-        eventCode, description, player));
+    state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(), eventCode, description, player));
   }
 
   ScoreboardTOState giveState() {
