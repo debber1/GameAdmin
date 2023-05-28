@@ -21,96 +21,88 @@ class Settings extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    return MaterialApp(
-      title: 'GameAdmin',
-      home: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(35.0),
-          child: AppBar(
-            title: Text('GameAdmin - github.com/debber1/GameAdmin'),
-            actions: <Widget>[
-              PopupMenuButton<String>(
-                onSelected: (choice) => handleClick(choice, context),
-                itemBuilder: (BuildContext context) {
-                  return {'Reset File'}.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(35.0),
+        child: AppBar(
+          title: Text('GameAdmin - github.com/debber1/GameAdmin'),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: (choice) => handleClick(choice, context),
+              itemBuilder: (BuildContext context) {
+                return {'Reset File'}.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
-        body: BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) {
-            return Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(),
-                  ),
-                  Expanded(
-                    flex: 50,
-                    child: InkWell(
-                      onTap: () => Navigator.pushNamed(context, gameAdminRoute),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.7),
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                              right: Radius.circular(10)),
-                        ),
-                        child: Center(
-                          child: Text("Without Tournament Organiser"),
-                        ),
+      ),
+      body: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, state) {
+          return Container(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 50,
+                  child: InkWell(
+                    onTap: () => Navigator.pushNamed(context, gameAdminRoute),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.7),
+                        borderRadius: BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
+                      ),
+                      child: Center(
+                        child: Text("Without Tournament Organiser"),
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(),
-                  ),
-                  Expanded(
-                    flex: 50,
-                    child: InkWell(
-                      onTap: () => _showDialogPitch(
-                        context,
-                        'Pitch',
-                        'Pitch',
-                        state.pitches,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 50,
+                  child: InkWell(
+                    onTap: () => _showDialogPitch(
+                      context,
+                      'Pitch',
+                      'Pitch',
+                      state.pitches,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.7),
+                        borderRadius: BorderRadius.horizontal(left: Radius.circular(10), right: Radius.circular(10)),
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.7),
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10),
-                              right: Radius.circular(10)),
-                        ),
-                        child: Center(
-                          child: Text("With Tournament Organiser"),
-                        ),
+                      child: Center(
+                        child: Text("With Tournament Organiser"),
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
   bool _infoDialogShowing = false;
-  void _showDialogPitch(
-      BuildContext contextI, String title, String text, List<Pitch> pitches) {
+  void _showDialogPitch(BuildContext contextI, String title, String text, List<Pitch> pitches) {
     _infoDialogShowing = true;
     showDialog(
       context: contextI,
@@ -126,15 +118,12 @@ class Settings extends StatelessWidget {
                   return InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
-                      Navigator.pushNamed(context, matchPickerRoute,
-                          arguments: pitches[index]);
+                      Navigator.pushNamed(context, matchPickerRoute, arguments: pitches[index]);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(5)),
+                        decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(5)),
                         child: Center(
                             child: Column(
                           children: [

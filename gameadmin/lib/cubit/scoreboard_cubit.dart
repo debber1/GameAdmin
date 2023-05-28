@@ -2,11 +2,16 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:gameadmin/com/repositoryTO.dart';
+import 'package:gameadmin/models/pitch.dart';
 
 part 'scoreboard_state.dart';
 
 class ScoreboardCubit extends Cubit<ScoreboardState> {
-  ScoreboardCubit() : super(ScoreboardInitial());
+  final RepositoryTO repositoryTO;
+
+  ScoreboardCubit(this.repositoryTO) : super(ScoreboardInitial());
+
   void incrementScore(int team) {
     if (team == 1 && state.score1 != 99) {
       emit(ScoreboardState(
@@ -117,6 +122,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
               team2: state.team2,
               team1Colour: state.team1Colour,
               team2Colour: state.team2Colour));
+          repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
         }
       });
     }

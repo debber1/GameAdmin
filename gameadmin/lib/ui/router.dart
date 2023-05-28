@@ -22,30 +22,28 @@ class GameAdminRouter {
     switch (settings.name) {
       case "/":
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (BuildContext context) => SettingsCubit(repositoryTO),
+            builder: (context) => BlocProvider(
+                  create: (context) => SettingsCubit(repositoryTO),
                   child: Settings(),
                 ));
       case gameAdminRoute:
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (BuildContext context) => ScoreboardCubit(),
+            builder: (context) => BlocProvider(
+                  create: (context) => ScoreboardCubit(repositoryTO),
                   child: ScoreBoard(),
                 ));
       case matchPickerRoute:
         final pitch = settings.arguments as Pitch;
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (BuildContext context) =>
-                      MatchPickerCubit(repositoryTO, pitch),
+            builder: (context) => BlocProvider(
+                  create: (context) => MatchPickerCubit(repositoryTO, pitch),
                   child: MatchPicker(),
                 ));
       case tournamentOrganiserRoute:
         final game = settings.arguments as Game;
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (BuildContext context) =>
-                      ScoreboardTOCubit(game, repositoryTO),
+            builder: (context) => BlocProvider(
+                  create: (context) => ScoreboardTOCubit(game, repositoryTO),
                   child: ScoreBoardTO(),
                 ));
       default:
