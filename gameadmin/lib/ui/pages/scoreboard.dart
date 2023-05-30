@@ -21,10 +21,10 @@ class ScoreBoard extends StatelessWidget {
     ]);
     return WillPopScope(
       onWillPop: () async {
-        // You can do some work here.
         // Returning true allows the pop to happen, returning false prevents it.
         BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
         BlocProvider.of<ScoreboardCubit>(context).close();
+        Navigator.pop(context);
         return true;
       },
       child: MaterialApp(
