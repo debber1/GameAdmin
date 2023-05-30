@@ -30,6 +30,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     } else if (team == 2 && state.score2 != 99) {
       emit(ScoreboardState(
           timer: state.timer,
@@ -47,6 +48,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
@@ -68,6 +70,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     } else if (team == 2 && state.score2 != 0) {
       emit(ScoreboardState(
           timer: state.timer,
@@ -85,10 +88,12 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
   void mainTimer() {
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     if (!state.timerRunning) {
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -176,6 +181,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void pauseTimer() {
@@ -195,6 +201,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void resetTimer() {
@@ -216,6 +223,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     } else {
       emit(ScoreboardState(
           timer: state.periodLength * 60,
@@ -233,6 +241,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
@@ -254,6 +263,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
@@ -274,6 +284,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team1,
         team1Colour: state.team2Colour,
         team2Colour: state.team1Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void restartPeriod() {
@@ -293,6 +304,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void startShotclock() {
@@ -312,6 +324,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void pauseShotclock() {
@@ -331,6 +344,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void resetShotclock() {
@@ -350,6 +364,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team2,
         team1Colour: state.team1Colour,
         team2Colour: state.team2Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void changeShotclock(int amount) {
@@ -370,6 +385,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
@@ -391,6 +407,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team1,
           team1Colour: state.team2Colour,
           team2Colour: state.team1Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     } else {
       emit(ScoreboardState(
           timer: state.periodLength * 60,
@@ -408,6 +425,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           team2: state.team2,
           team1Colour: state.team1Colour,
           team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
     }
   }
 
@@ -428,6 +446,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team1,
         team1Colour: state.team2Colour,
         team2Colour: state.team1Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 
   void switchSides() {
@@ -447,5 +466,6 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
         team2: state.team1,
         team1Colour: state.team2Colour,
         team2Colour: state.team1Colour));
+    repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", "192.168.1.140"));
   }
 }
