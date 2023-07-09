@@ -166,6 +166,9 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
   }
 
   void startTimer() {
+    if (state.timer == 600) {
+      startShotclock();
+    }
     emit(ScoreboardState(
         timer: state.timer,
         shotclock: state.shotclock,
