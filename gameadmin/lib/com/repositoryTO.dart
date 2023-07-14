@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:gameadmin/com/networkServiceTO.dart';
 import 'package:gameadmin/com/repositorySB.dart';
@@ -14,18 +15,14 @@ class RepositoryTO {
   Future<List<Game>> fetchGames(String pitchId) async {
     final rawData = await networkServiceTO.fetchGames(pitchId);
     final List<dynamic> parsedJson = jsonDecode(rawData);
-    final List<Game> games = parsedJson != null
-        ? parsedJson.map((e) => Game.fromJson(e)).toList()
-        : <Game>[];
+    final List<Game> games = parsedJson != null ? parsedJson.map((e) => Game.fromJson(e)).toList() : <Game>[];
     return games;
   }
 
   Future<List<Pitch>> fetchPitch(String tournamentID) async {
     final rawPitch = await networkServiceTO.fetchPitch(tournamentID);
     final List<dynamic> parsedJson = jsonDecode(rawPitch);
-    final List<Pitch> pitches = parsedJson != null
-        ? parsedJson.map((e) => Pitch.fromJson(e)).toList()
-        : <Pitch>[];
+    final List<Pitch> pitches = parsedJson != null ? parsedJson.map((e) => Pitch.fromJson(e)).toList() : <Pitch>[];
     return pitches;
   }
 
@@ -34,24 +31,32 @@ class RepositoryTO {
     for (var id in ids) {
       final rawPlayers = await networkServiceTO.fetchPlayers(id);
       final List<dynamic> parsedJson = jsonDecode(rawPlayers);
-      final List<PlayerGame> player = parsedJson != null
-          ? parsedJson.map((e) => PlayerGame.fromJson(e)).toList()
-          : <PlayerGame>[];
+      final List<PlayerGame> player = parsedJson != null ? parsedJson.map((e) => PlayerGame.fromJson(e)).toList() : <PlayerGame>[];
       players.add(player);
     }
     return players;
   }
 
   Future<dynamic> pushResult(ReturnData returnData) async {
-    final status =
-        await networkServiceTO.pushResult(jsonEncode(returnData.toJson()));
+    final status = await networkServiceTO.pushResult(jsonEncode(returnData.toJson()));
     return status;
   }
 
-  void syncScoreBoard(int playTime, int shotTime, int scoreBlue, int scoreRed,
-      Pitch pitch) async {
-    networkServiceTO.syncScoreBoard(
-        jsonEncode(buildJson(playTime, shotTime, scoreBlue, scoreRed)),
-        pitch.scoreIP);
+  void syncScoreBoard(int playTime, int shotTime, int scoreBlue, int scoreRed, Pitch pitch) async {
+    networkServiceTO.syncScoreBoard(jsonEncode(buildJson(playTime, shotTime, scoreBlue, scoreRed)), pitch.scoreIP);
+  }
+
+  void soundHornMain(int repetitions, int duration, Pitch pitch) async {
+    for (int i = 0; i < repetitions; i++) {
+      networkServiceTO.syncScoreBoard("{main_buzzer:" + duration.toString() + "}", pitch.scoreIP);
+      await Future.delayed(Duration(milliseconds: 500 + duration * 10));
+    }
+  }
+
+  void soundShotClockHorn(int repetitions, int duration, Pitch pitch) async {
+    for (int i = 0; i < repetitions; i++) {
+      networkServiceTO.syncScoreBoard("{shotclock_buzzer:" + duration.toString() + "}", pitch.scoreIP);
+      await Future.delayed(Duration(milliseconds: 500 + duration * 10));
+    }
   }
 }

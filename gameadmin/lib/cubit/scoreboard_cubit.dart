@@ -9,7 +9,7 @@ part 'scoreboard_state.dart';
 
 class ScoreboardCubit extends Cubit<ScoreboardState> {
   final RepositoryTO repositoryTO;
-  final String temp_ip = "192.168.138.242";
+  final String temp_ip = "192.168.1.140";
 
   ScoreboardCubit(this.repositoryTO) : super(ScoreboardInitial());
 
@@ -100,6 +100,7 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (state.timerShouldRun) {
           if (state.timer == 0 && !state.breakActive && state.period == 1) {
+            repositoryTO.soundHornMain(2, 6, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
             startBreak();
             return;
           }
@@ -109,8 +110,15 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
           }
           if (state.timer == 0 && state.period >= 2) {
             //TODO: Implement what needs to happen at the end of a match.
+            repositoryTO.soundHornMain(3, 6, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
             pauseTimer();
             return;
+          }
+          if (state.shotclock == 20) {
+            repositoryTO.soundShotClockHorn(1, 5, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+          }
+          if (state.shotclock == 0) {
+            repositoryTO.soundShotClockHorn(2, 5, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
           }
           emit(ScoreboardState(
               timer: state.timer - 1,
