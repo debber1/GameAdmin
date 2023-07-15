@@ -157,10 +157,28 @@ class ScoreBoard extends StatelessWidget {
                                   // ignore: prefer_const_literals_to_create_immutables
                                   children: <Widget>[
                                     Expanded(
-                                      child: FittedBox(
-                                        fit: BoxFit.contain,
-                                        child: Text(
-                                          breakAlert(context, state.timer, state.breakLength, state.period, state.breakActive, state.periodLength, (state.score1 == state.score2)),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          String twoDigits(int n) => n.toString().padLeft(2, "0");
+                                          String twoDigitMinutes = twoDigits(Duration(seconds: state.timer).inMinutes.remainder(60));
+                                          String twoDigitSeconds = twoDigits(Duration(seconds: state.timer).inSeconds.remainder(60));
+                                          TimeOfDay? newTime = await showTimePicker(
+                                            initialTime: TimeOfDay(hour: int.parse(twoDigitMinutes), minute: int.parse(twoDigitSeconds)),
+                                            hourLabelText: "Minutes",
+                                            minuteLabelText: "Seconds",
+                                            initialEntryMode: TimePickerEntryMode.input,
+                                            context: context,
+                                          );
+                                          if (newTime != null) {
+                                            int newTimeSeconds = newTime.hour * 60 + newTime.minute;
+                                            BlocProvider.of<ScoreboardCubit>(context).setTimer(newTimeSeconds);
+                                          }
+                                        },
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Text(
+                                            breakAlert(context, state.timer, state.breakLength, state.period, state.breakActive, state.periodLength, (state.score1 == state.score2)),
+                                          ),
                                         ),
                                       ),
                                     ),

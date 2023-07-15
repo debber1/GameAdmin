@@ -278,6 +278,28 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
     }
   }
 
+  void setTimer(int newTime) {
+    if (newTime <= 600) {
+      emit(ScoreboardState(
+          timer: newTime,
+          shotclock: state.shotclock,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: state.score1,
+          score2: state.score2,
+          period: state.period,
+          timerRunning: state.timerRunning,
+          timerShouldRun: state.timerShouldRun,
+          breakActive: state.breakActive,
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+    }
+  }
+
   void startBreak() {
     emit(ScoreboardState(
         timer: state.breakLength * 60,
