@@ -185,7 +185,11 @@ class ScoreBoard extends StatelessWidget {
                             flex: 5,
                             child: InkWell(
                               onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context).startTimer();
+                                if (state.timerShouldRun) {
+                                  BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+                                } else {
+                                  BlocProvider.of<ScoreboardCubit>(context).startTimer();
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -195,7 +199,7 @@ class ScoreBoard extends StatelessWidget {
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                 ),
                                 child: Center(
-                                  child: Text("Start"),
+                                  child: Text(startOrStop(state.timerShouldRun)),
                                 ),
                               ),
                             ),
@@ -204,25 +208,25 @@ class ScoreBoard extends StatelessWidget {
                             flex: 1,
                             child: Container(),
                           ),
-                          Expanded(
-                            flex: 5,
-                            child: InkWell(
-                              onTap: () {
-                                BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                  ),
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                                child: Center(
-                                  child: Text("Time out"),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Expanded(
+                          //   flex: 5,
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+                          //     },
+                          //     child: Container(
+                          //       decoration: BoxDecoration(
+                          //         border: Border.all(
+                          //           color: Colors.grey,
+                          //         ),
+                          //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                          //       ),
+                          //       child: Center(
+                          //         child: Text("Time out"),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           Expanded(
                             flex: 1,
                             child: Container(),
