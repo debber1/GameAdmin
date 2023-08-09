@@ -9,7 +9,7 @@ part 'scoreboard_state.dart';
 
 class ScoreboardCubit extends Cubit<ScoreboardState> {
   final RepositoryTO repositoryTO;
-  final String temp_ip = "192.168.1.140";
+  final String temp_ip = "192.168.2.34";
 
   ScoreboardCubit(this.repositoryTO) : super(ScoreboardInitial());
 
@@ -283,6 +283,28 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
       emit(ScoreboardState(
           timer: newTime,
           shotclock: state.shotclock,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: state.score1,
+          score2: state.score2,
+          period: state.period,
+          timerRunning: state.timerRunning,
+          timerShouldRun: state.timerShouldRun,
+          breakActive: state.breakActive,
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Colour: state.team1Colour,
+          team2Colour: state.team2Colour));
+      repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+    }
+  }
+
+  void setShotclockTimer(int newTime) {
+    if (newTime <= 60) {
+      emit(ScoreboardState(
+          timer: state.timer,
+          shotclock: newTime,
           breakLength: state.breakLength,
           periodLength: state.periodLength,
           score1: state.score1,

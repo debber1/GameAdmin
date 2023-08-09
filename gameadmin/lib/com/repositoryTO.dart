@@ -48,15 +48,15 @@ class RepositoryTO {
 
   void soundHornMain(int repetitions, int duration, Pitch pitch) async {
     for (int i = 0; i < repetitions; i++) {
-      networkServiceTO.syncScoreBoard("{main_buzzer:" + duration.toString() + "}", pitch.scoreIP);
-      await Future.delayed(Duration(milliseconds: 500 + duration * 10));
+      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":[{\"main_buzzer\":\"" + duration.toString() + "\"}]}}", pitch.scoreIP);
+      await Future.delayed(Duration(milliseconds: 1000 + duration * 10));
     }
   }
 
   void soundShotClockHorn(int repetitions, int duration, Pitch pitch) async {
     for (int i = 0; i < repetitions; i++) {
-      networkServiceTO.syncScoreBoard("{shotclock_buzzer:" + duration.toString() + "}", pitch.scoreIP);
-      await Future.delayed(Duration(milliseconds: 500 + duration * 10));
+      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":[{\"shotclock_buzzer\":\"" + duration.toString() + "\"}]}}", pitch.scoreIP);
+      await Future.delayed(Duration(milliseconds: 1000 + duration * 10));
     }
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class ScoreBoard extends StatelessWidget {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(35.0),
             child: AppBar(
-              title: Text('GameAdmin - github.com/debber1/GameAdmin'),
+              title: Text('Tournament De Paddel 2023'),
               actions: <Widget>[
                 PopupMenuButton<String>(
                   onSelected: (choice) => handleClick(choice, context),
@@ -258,8 +259,25 @@ class ScoreBoard extends StatelessWidget {
                                   flex: 3,
                                   child: FittedBox(
                                     fit: BoxFit.contain,
-                                    child: Text(
-                                      shotClockAlert(context, state.shotclock),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        String twoDigits(int n) => n.toString().padLeft(2, "0");
+                                        String twoDigitSeconds = twoDigits(Duration(seconds: state.shotclock).inSeconds);
+                                        TimeOfDay? newTime = await showTimePicker(
+                                          initialTime: TimeOfDay(hour: 0, minute: int.parse(twoDigitSeconds)),
+                                          hourLabelText: "Minutes",
+                                          minuteLabelText: "Seconds",
+                                          initialEntryMode: TimePickerEntryMode.input,
+                                          context: context,
+                                        );
+                                        if (newTime != null) {
+                                          int newTimeSeconds = newTime.hour * 60 + newTime.minute;
+                                          BlocProvider.of<ScoreboardCubit>(context).setShotclockTimer(newTimeSeconds);
+                                        }
+                                      },
+                                      child: Text(
+                                        shotClockAlert(context, state.shotclock),
+                                      ),
                                     ),
                                   ),
                                 ),
