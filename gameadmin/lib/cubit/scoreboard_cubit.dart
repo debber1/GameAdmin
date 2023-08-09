@@ -403,9 +403,13 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
   }
 
   void resetShotclock() {
+    int resetTime = 60;
+    if (state.timer <= 60) {
+      resetTime = state.timer;
+    }
     emit(ScoreboardState(
         timer: state.timer,
-        shotclock: 60,
+        shotclock: resetTime,
         breakLength: state.breakLength,
         periodLength: state.periodLength,
         score1: state.score1,

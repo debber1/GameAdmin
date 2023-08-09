@@ -29,6 +29,7 @@ class ScoreBoard extends StatelessWidget {
         return true;
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'GameAdmin',
         home: Scaffold(
           appBar: PreferredSize(
