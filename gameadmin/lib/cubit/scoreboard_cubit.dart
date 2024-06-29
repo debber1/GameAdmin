@@ -9,7 +9,7 @@ part 'scoreboard_state.dart';
 
 class ScoreboardCubit extends Cubit<ScoreboardState> {
   final RepositoryTO repositoryTO;
-  final String temp_ip = "192.168.2.34";
+  final String temp_ip = "192.168.2.51";
 
   ScoreboardCubit(this.repositoryTO) : super(ScoreboardInitial());
 

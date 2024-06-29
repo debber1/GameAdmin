@@ -43,19 +43,20 @@ class RepositoryTO {
   }
 
   void syncScoreBoard(int playTime, int shotTime, int scoreBlue, int scoreRed, Pitch pitch) async {
-    networkServiceTO.syncScoreBoard(jsonEncode(buildJson(playTime, shotTime, scoreBlue, scoreRed)), pitch.scoreIP);
+    //networkServiceTO.syncScoreBoard(jsonEncode(buildJson(playTime, shotTime, scoreBlue, scoreRed)), pitch.scoreIP);
+    networkServiceTO.syncScoreBoard("{\"board\":{\"time\":{\"play_time\":" + playTime.toString() + ", \"shot_time\":" + shotTime.toString() + "}, \"score\":{\"blue\":" + scoreBlue.toString() + ", \"red\":" + scoreRed.toString() + "}}}\r", pitch.scoreIP);
   }
 
   void soundHornMain(int repetitions, int duration, Pitch pitch) async {
     for (int i = 0; i < repetitions; i++) {
-      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":[{\"main_buzzer\":\"" + duration.toString() + "\"}]}}", pitch.scoreIP);
+      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":{\"master_buzzer\":\"" + duration.toString() + "\"}}}\r", pitch.scoreIP);
       await Future.delayed(Duration(milliseconds: 1000 + duration * 10));
     }
   }
 
   void soundShotClockHorn(int repetitions, int duration, Pitch pitch) async {
     for (int i = 0; i < repetitions; i++) {
-      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":[{\"shotclock_buzzer\":\"" + duration.toString() + "\"}]}}", pitch.scoreIP);
+      networkServiceTO.syncScoreBoard("{\"board\":{\"buzzer\":{\"shotclock_buzzer\":\"" + duration.toString() + "\"}}}\r", pitch.scoreIP);
       await Future.delayed(Duration(milliseconds: 1000 + duration * 10));
     }
   }
