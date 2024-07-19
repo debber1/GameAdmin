@@ -9,7 +9,7 @@ part 'scoreboard_state.dart';
 
 class ScoreboardCubit extends Cubit<ScoreboardState> {
   final RepositoryTO repositoryTO;
-  final String temp_ip = "192.168.2.51";
+  final String temp_ip = "192.168.2.52";
 
   ScoreboardCubit(this.repositoryTO) : super(ScoreboardInitial());
 
@@ -167,6 +167,10 @@ class ScoreboardCubit extends Cubit<ScoreboardState> {
                 team2: state.team2,
                 team1Colour: state.team1Colour,
                 team2Colour: state.team2Colour));
+          }
+          // Sync score board if main timer is not running but shot clock is
+          if (!state.timerShouldRun) {
+            repositoryTO.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
           }
         }
       });
