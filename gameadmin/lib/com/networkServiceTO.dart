@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:gameadmin/models/pitch.dart';
 import 'package:gameadmin/util/server.dart';
@@ -57,16 +58,23 @@ class NetworkServiceTO {
     }
   }
 
-  void syncScoreBoard(String data, String? scoreIP) async {
+  void syncScoreBoard(String datagram, String? scoreIP) async {
     if (scoreIP != null) {
       try {
-        TcpSocketConnection tcpSocketConnection = TcpSocketConnection(scoreIP, 10000);
-        if (await tcpSocketConnection.canConnect(500, attempts: 2)) {
+        var DESTINATION_ADDRESS = InternetAddress(scoreIP);
+
+        RawDatagramSocket.bind(InternetAddress.anyIPv4, 10000).then((RawDatagramSocket udpSocket) {
+          udpSocket.broadcastEnabled = false;
+          List<int> data = utf8.encode(datagram);
+          udpSocket.send(data, DESTINATION_ADDRESS, 10000);
+        });
+/*         TcpSocketConnection tcpSocketConnection = TcpSocketConnection(scoreIP, 10000);
+        if (await tcpSocketConnection.canConnect(250, attempts: 1)) {
           //check if it's possible to connect to the endpoint
           final connection = await tcpSocketConnection.connect(5000, recieveMessage, attempts: 3);
           tcpSocketConnection.sendMessage(data);
           tcpSocketConnection.disconnect();
-        }
+        } */
       } catch (e) {
         print(e);
       }

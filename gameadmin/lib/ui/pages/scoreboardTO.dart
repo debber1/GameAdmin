@@ -1250,8 +1250,9 @@ class ScoreBoardTO extends StatelessWidget {
                                       players[index].player.firstName +
                                           " " +
                                           players[index].player.lastName,
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -1351,8 +1352,9 @@ class ScoreBoardTO extends StatelessWidget {
                                       players[index].player.firstName +
                                           " " +
                                           players[index].player.lastName,
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -1445,8 +1447,9 @@ class ScoreBoardTO extends StatelessWidget {
                                       players[index].player.firstName +
                                           " " +
                                           players[index].player.lastName,
-                                      style:
-                                          Theme.of(context).textTheme.headline5,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
