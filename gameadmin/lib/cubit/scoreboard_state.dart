@@ -12,6 +12,7 @@ class ScoreboardState {
   bool timerShouldRun;
   bool breakActive;
   bool shotclockShouldRun;
+  bool? cancelTimer;
   String team1;
   String team2;
   Color team1Colour;
@@ -28,6 +29,7 @@ class ScoreboardState {
       required this.timerShouldRun,
       required this.breakActive,
       required this.shotclockShouldRun,
+      this.cancelTimer,
       required this.team1,
       required this.team2,
       required this.team1Colour,
@@ -48,6 +50,7 @@ class ScoreboardInitial extends ScoreboardState {
             timerShouldRun: false,
             breakActive: false,
             shotclockShouldRun: false,
+            cancelTimer: false,
             team1: "Team A",
             team2: "Team B",
             team1Colour: Colors.blue,

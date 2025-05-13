@@ -13,6 +13,7 @@ class ScoreBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ScoreboardCubit>(context).allowTimer();
     BlocProvider.of<ScoreboardCubit>(context).shotclockTimer();
     BlocProvider.of<ScoreboardCubit>(context).mainTimer();
 
@@ -24,6 +25,7 @@ class ScoreBoard extends StatelessWidget {
       onWillPop: () async {
         // Returning true allows the pop to happen, returning false prevents it.
         BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+        BlocProvider.of<ScoreboardCubit>(context).killTimer();
         BlocProvider.of<ScoreboardCubit>(context).close();
         Navigator.pop(context);
         return true;
@@ -35,12 +37,18 @@ class ScoreBoard extends StatelessWidget {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(35.0),
             child: AppBar(
+              backgroundColor: Colors.grey.shade300,
               title: Text('Tournament De Paddel 2024'),
               actions: <Widget>[
                 PopupMenuButton<String>(
                   onSelected: (choice) => handleClick(choice, context),
                   itemBuilder: (BuildContext context) {
-                    return {'Reset timer', 'Reset game', 'Switch sides', 'Back to settings'}.map((String choice) {
+                    return {
+                      'Reset timer',
+                      'Reset game',
+                      'Switch sides',
+                      'Back to settings'
+                    }.map((String choice) {
                       return PopupMenuItem<String>(
                         value: choice,
                         child: Text(choice),
@@ -56,7 +64,8 @@ class ScoreBoard extends StatelessWidget {
               return Container(
                 child: Row(
                   children: <Widget>[
-                    Expanded(flex: 2, child: Container()), //spacing on the left side
+                    Expanded(
+                        flex: 2, child: Container()), //spacing on the left side
                     Expanded(
                       flex: 50,
                       child: Container(
@@ -70,9 +79,13 @@ class ScoreBoard extends StatelessWidget {
                                   Expanded(
                                     flex: 2,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0, top: 8.0),
                                       child: Container(
-                                        decoration: BoxDecoration(color: state.team1Colour, borderRadius: BorderRadius.circular(5)),
+                                        decoration: BoxDecoration(
+                                            color: state.team1Colour,
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                       ),
                                     ),
                                   ),
@@ -81,7 +94,8 @@ class ScoreBoard extends StatelessWidget {
                                     child: FittedBox(
                                         fit: BoxFit.contain,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(top: 5, bottom: 5, right: 40),
+                                          padding: const EdgeInsets.only(
+                                              top: 5, bottom: 5, right: 40),
                                           child: Text(
                                             state.team1,
                                           ),
@@ -98,12 +112,16 @@ class ScoreBoard extends StatelessWidget {
                                     flex: 7,
                                     child: InkWell(
                                       onTap: () {
-                                        BlocProvider.of<ScoreboardCubit>(context).decrementScore(1);
+                                        BlocProvider.of<ScoreboardCubit>(
+                                                context)
+                                            .decrementScore(1);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.redAccent.withOpacity(0.7),
-                                          borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+                                          color:
+                                              Colors.redAccent.withOpacity(0.7),
+                                          borderRadius: BorderRadius.horizontal(
+                                              left: Radius.circular(10)),
                                         ),
                                         child: Center(
                                           child: Icon(Icons.remove),
@@ -115,12 +133,15 @@ class ScoreBoard extends StatelessWidget {
                                     flex: 7,
                                     child: InkWell(
                                       onTap: () {
-                                        BlocProvider.of<ScoreboardCubit>(context).incrementScore(1);
+                                        BlocProvider.of<ScoreboardCubit>(
+                                                context)
+                                            .incrementScore(1);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.green.withOpacity(0.7),
-                                          borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
+                                          borderRadius: BorderRadius.horizontal(
+                                              right: Radius.circular(10)),
                                         ),
                                         child: Center(
                                           child: Icon(Icons.add),
@@ -136,7 +157,9 @@ class ScoreBoard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(flex: 2, child: Container()), //spacing on the right side
+                    Expanded(
+                        flex: 2,
+                        child: Container()), //spacing on the right side
                     Expanded(
                       //Second column of three
                       flex: 40,
@@ -161,25 +184,49 @@ class ScoreBoard extends StatelessWidget {
                                     Expanded(
                                       child: InkWell(
                                         onTap: () async {
-                                          String twoDigits(int n) => n.toString().padLeft(2, "0");
-                                          String twoDigitMinutes = twoDigits(Duration(seconds: state.timer).inMinutes.remainder(60));
-                                          String twoDigitSeconds = twoDigits(Duration(seconds: state.timer).inSeconds.remainder(60));
-                                          TimeOfDay? newTime = await showTimePicker(
-                                            initialTime: TimeOfDay(hour: int.parse(twoDigitMinutes), minute: int.parse(twoDigitSeconds)),
+                                          String twoDigits(int n) =>
+                                              n.toString().padLeft(2, "0");
+                                          String twoDigitMinutes = twoDigits(
+                                              Duration(seconds: state.timer)
+                                                  .inMinutes
+                                                  .remainder(60));
+                                          String twoDigitSeconds = twoDigits(
+                                              Duration(seconds: state.timer)
+                                                  .inSeconds
+                                                  .remainder(60));
+                                          TimeOfDay? newTime =
+                                              await showTimePicker(
+                                            initialTime: TimeOfDay(
+                                                hour:
+                                                    int.parse(twoDigitMinutes),
+                                                minute:
+                                                    int.parse(twoDigitSeconds)),
                                             hourLabelText: "Minutes",
                                             minuteLabelText: "Seconds",
-                                            initialEntryMode: TimePickerEntryMode.input,
+                                            initialEntryMode:
+                                                TimePickerEntryMode.input,
                                             context: context,
                                           );
                                           if (newTime != null) {
-                                            int newTimeSeconds = newTime.hour * 60 + newTime.minute;
-                                            BlocProvider.of<ScoreboardCubit>(context).setTimer(newTimeSeconds);
+                                            int newTimeSeconds =
+                                                newTime.hour * 60 +
+                                                    newTime.minute;
+                                            BlocProvider.of<ScoreboardCubit>(
+                                                    context)
+                                                .setTimer(newTimeSeconds);
                                           }
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
                                           child: Text(
-                                            breakAlert(context, state.timer, state.breakLength, state.period, state.breakActive, state.periodLength, (state.score1 == state.score2)),
+                                            breakAlert(
+                                                context,
+                                                state.timer,
+                                                state.breakLength,
+                                                state.period,
+                                                state.breakActive,
+                                                state.periodLength,
+                                                (state.score1 == state.score2)),
                                           ),
                                         ),
                                       ),
@@ -188,7 +235,9 @@ class ScoreBoard extends StatelessWidget {
                                       child: FittedBox(
                                         fit: BoxFit.contain,
                                         child: Text(
-                                          state.score1.toString() + "-" + state.score2.toString(),
+                                          state.score1.toString() +
+                                              "-" +
+                                              state.score2.toString(),
                                         ),
                                       ),
                                     ),
@@ -206,9 +255,11 @@ class ScoreBoard extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 if (state.timerShouldRun) {
-                                  BlocProvider.of<ScoreboardCubit>(context).pauseTimer();
+                                  BlocProvider.of<ScoreboardCubit>(context)
+                                      .pauseTimer();
                                 } else {
-                                  BlocProvider.of<ScoreboardCubit>(context).startTimer();
+                                  BlocProvider.of<ScoreboardCubit>(context)
+                                      .startTimer();
                                 }
                               },
                               child: Container(
@@ -216,10 +267,12 @@ class ScoreBoard extends StatelessWidget {
                                   border: Border.all(
                                     color: Colors.grey,
                                   ),
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                 ),
                                 child: Center(
-                                  child: Text(startOrStop(state.timerShouldRun)),
+                                  child:
+                                      Text(startOrStop(state.timerShouldRun)),
                                 ),
                               ),
                             ),
@@ -262,22 +315,36 @@ class ScoreBoard extends StatelessWidget {
                                     fit: BoxFit.contain,
                                     child: InkWell(
                                       onTap: () async {
-                                        String twoDigits(int n) => n.toString().padLeft(2, "0");
-                                        String twoDigitSeconds = twoDigits(Duration(seconds: state.shotclock).inSeconds);
-                                        TimeOfDay? newTime = await showTimePicker(
-                                          initialTime: TimeOfDay(hour: 0, minute: int.parse(twoDigitSeconds)),
+                                        String twoDigits(int n) =>
+                                            n.toString().padLeft(2, "0");
+                                        String twoDigitSeconds = twoDigits(
+                                            Duration(seconds: state.shotclock)
+                                                .inSeconds);
+                                        TimeOfDay? newTime =
+                                            await showTimePicker(
+                                          initialTime: TimeOfDay(
+                                              hour: 0,
+                                              minute:
+                                                  int.parse(twoDigitSeconds)),
                                           hourLabelText: "Minutes",
                                           minuteLabelText: "Seconds",
-                                          initialEntryMode: TimePickerEntryMode.input,
+                                          initialEntryMode:
+                                              TimePickerEntryMode.input,
                                           context: context,
                                         );
                                         if (newTime != null) {
-                                          int newTimeSeconds = newTime.hour * 60 + newTime.minute;
-                                          BlocProvider.of<ScoreboardCubit>(context).setShotclockTimer(newTimeSeconds);
+                                          int newTimeSeconds =
+                                              newTime.hour * 60 +
+                                                  newTime.minute;
+                                          BlocProvider.of<ScoreboardCubit>(
+                                                  context)
+                                              .setShotclockTimer(
+                                                  newTimeSeconds);
                                         }
                                       },
                                       child: Text(
-                                        shotClockAlert(context, state.shotclock),
+                                        shotClockAlert(
+                                            context, state.shotclock),
                                       ),
                                     ),
                                   ),
@@ -293,18 +360,26 @@ class ScoreBoard extends StatelessWidget {
                                               border: Border.all(
                                                 color: Colors.grey,
                                               ),
-                                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
                                             ),
                                             child: InkWell(
                                               onTap: () {
                                                 if (state.shotclockShouldRun) {
-                                                  BlocProvider.of<ScoreboardCubit>(context).pauseShotclock();
+                                                  BlocProvider.of<
+                                                              ScoreboardCubit>(
+                                                          context)
+                                                      .pauseShotclock();
                                                 } else {
-                                                  BlocProvider.of<ScoreboardCubit>(context).startShotclock();
+                                                  BlocProvider.of<
+                                                              ScoreboardCubit>(
+                                                          context)
+                                                      .startShotclock();
                                                 }
                                               },
                                               child: Center(
-                                                child: Text(startOrStop(state.shotclockShouldRun)),
+                                                child: Text(startOrStop(
+                                                    state.shotclockShouldRun)),
                                               ),
                                             ),
                                           ),
@@ -317,15 +392,20 @@ class ScoreBoard extends StatelessWidget {
                                           flex: 5,
                                           child: InkWell(
                                             onTap: () {
-                                              BlocProvider.of<ScoreboardCubit>(context).resetShotclock();
-                                              BlocProvider.of<ScoreboardCubit>(context).startShotclock();
+                                              BlocProvider.of<ScoreboardCubit>(
+                                                      context)
+                                                  .resetShotclock();
+                                              BlocProvider.of<ScoreboardCubit>(
+                                                      context)
+                                                  .startShotclock();
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: Colors.grey,
                                                 ),
-                                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
                                               ),
                                               child: Center(
                                                 child: Text("Reset"),
@@ -343,9 +423,11 @@ class ScoreBoard extends StatelessWidget {
                             child: FittedBox(
                                 fit: BoxFit.contain,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 5, right: 5, left: 5),
                                   child: Text(
-                                    periodIndicator(state.period, state.breakActive),
+                                    periodIndicator(
+                                        state.period, state.breakActive),
                                   ),
                                 )),
                           ),
@@ -370,9 +452,13 @@ class ScoreBoard extends StatelessWidget {
                                   Expanded(
                                     flex: 2,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0, top: 8.0),
                                       child: Container(
-                                        decoration: BoxDecoration(color: state.team2Colour, borderRadius: BorderRadius.circular(5)),
+                                        decoration: BoxDecoration(
+                                            color: state.team2Colour,
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                       ),
                                     ),
                                   ),
@@ -381,7 +467,8 @@ class ScoreBoard extends StatelessWidget {
                                     child: FittedBox(
                                         fit: BoxFit.contain,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(top: 5, bottom: 5, right: 40),
+                                          padding: const EdgeInsets.only(
+                                              top: 5, bottom: 5, right: 40),
                                           child: Text(
                                             state.team2,
                                           ),
@@ -398,12 +485,16 @@ class ScoreBoard extends StatelessWidget {
                                     flex: 7,
                                     child: InkWell(
                                       onTap: () {
-                                        BlocProvider.of<ScoreboardCubit>(context).decrementScore(2);
+                                        BlocProvider.of<ScoreboardCubit>(
+                                                context)
+                                            .decrementScore(2);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Colors.redAccent.withOpacity(0.7),
-                                          borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+                                          color:
+                                              Colors.redAccent.withOpacity(0.7),
+                                          borderRadius: BorderRadius.horizontal(
+                                              left: Radius.circular(10)),
                                         ),
                                         child: Center(
                                           child: Icon(Icons.remove),
@@ -415,12 +506,15 @@ class ScoreBoard extends StatelessWidget {
                                     flex: 7,
                                     child: InkWell(
                                       onTap: () {
-                                        BlocProvider.of<ScoreboardCubit>(context).incrementScore(2);
+                                        BlocProvider.of<ScoreboardCubit>(
+                                                context)
+                                            .incrementScore(2);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.green.withOpacity(0.7),
-                                          borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
+                                          borderRadius: BorderRadius.horizontal(
+                                              right: Radius.circular(10)),
                                         ),
                                         child: Center(
                                           child: Icon(Icons.add),
@@ -527,23 +621,49 @@ class ScoreBoard extends StatelessWidget {
 
   String shotClockAlert(BuildContext context, int shotClock) {
     if (shotClock == 0) {
-      Future.delayed(Duration.zero, () => _showDialogGeneral(context, "Shotclock", "The shotclock timer reached zero."));
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogGeneral(
+              context, "Shotclock", "The shotclock timer reached zero."));
     }
     return shotClock.toString();
   }
 
-  String breakAlert(BuildContext context, int timer, int breakLength, int period, bool breakActive, int periodLength, bool draw) {
-    if (timer == breakLength * 60 && period == 1 && breakActive == true && _dialogShowing == false) {
-      Future.delayed(Duration.zero, () => _showDialogGeneral(context, "Break", "The break is starting."));
+  String breakAlert(BuildContext context, int timer, int breakLength,
+      int period, bool breakActive, int periodLength, bool draw) {
+    if (timer == breakLength * 60 &&
+        period == 1 &&
+        breakActive == true &&
+        _dialogShowing == false) {
+      Future.delayed(Duration.zero,
+          () => _showDialogGeneral(context, "Break", "The break is starting."));
     }
-    if (timer == 0 && period == 1 && breakActive == true && _dialogShowing == false) {
-      Future.delayed(Duration.zero, () => _showDialogGeneral(context, "Break", "The break is ending."));
+    if (timer == 0 &&
+        period == 1 &&
+        breakActive == true &&
+        _dialogShowing == false) {
+      Future.delayed(Duration.zero,
+          () => _showDialogGeneral(context, "Break", "The break is ending."));
     }
-    if (timer == 0 && period >= 2 && draw == false && breakActive == false && _dialogShowing == false) {
-      Future.delayed(Duration.zero, () => _showDialogGeneral(context, "End of the game", "The game time has ended."));
+    if (timer == 0 &&
+        period >= 2 &&
+        draw == false &&
+        breakActive == false &&
+        _dialogShowing == false) {
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogGeneral(
+              context, "End of the game", "The game time has ended."));
     }
-    if (timer == 0 && period >= 2 && draw == true && breakActive == false && _dialogShowing == false) {
-      Future.delayed(Duration.zero, () => _showDialogEnd(context, "End of the game", "The game time has ended."));
+    if (timer == 0 &&
+        period >= 2 &&
+        draw == true &&
+        breakActive == false &&
+        _dialogShowing == false) {
+      Future.delayed(
+          Duration.zero,
+          () => _showDialogEnd(
+              context, "End of the game", "The game time has ended."));
     }
     return _printDuration(Duration(seconds: timer));
   }
