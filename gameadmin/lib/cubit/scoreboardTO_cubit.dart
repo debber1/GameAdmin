@@ -26,7 +26,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   final Game game;
   final RepositoryTO repositoryTo;
 
-  ScoreboardTOCubit(this.game, this.repositoryTo) : super(ScoreboardTOInitial());
+  ScoreboardTOCubit(this.game, this.repositoryTo)
+      : super(ScoreboardTOInitial());
   void setstate() {
     recall(game.id).then((saveState) {
       if (saveState.gameData.id == '') {
@@ -191,7 +192,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
               gameData: state.gameData,
               eventLogs: state.eventLogs));
         }
-        repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1, state.score2, state.gameData.pitch);
+        repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+            state.score2, state.gameData.pitch);
       });
     }
   }
@@ -340,6 +342,66 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           cards: state.cards,
           gameData: state.gameData,
           eventLogs: state.eventLogs));
+    }
+  }
+
+  void setTimer(int newTime) {
+    if (newTime <= 600) {
+      emit(ScoreboardTOState(
+          timer: newTime,
+          shotclock: state.shotclock,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: state.score1,
+          score2: state.score2,
+          period: state.period,
+          timerRunning: state.timerRunning,
+          timerShouldRun: state.timerShouldRun,
+          breakActive: state.breakActive,
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Players: state.team1Players,
+          team2Players: state.team2Players,
+          cards: state.cards,
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
+      // repositoryTO.syncScoreBoard(
+      //     state.timer,
+      //     state.shotclock,
+      //     state.score1,
+      //     state.score2,
+      //     Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+    }
+  }
+
+  void setShotclockTimer(int newTime) {
+    if (newTime <= 60) {
+      emit(ScoreboardTOState(
+          timer: state.timer,
+          shotclock: newTime,
+          breakLength: state.breakLength,
+          periodLength: state.periodLength,
+          score1: state.score1,
+          score2: state.score2,
+          period: state.period,
+          timerRunning: state.timerRunning,
+          timerShouldRun: state.timerShouldRun,
+          breakActive: state.breakActive,
+          shotclockShouldRun: state.shotclockShouldRun,
+          team1: state.team1,
+          team2: state.team2,
+          team1Players: state.team1Players,
+          team2Players: state.team2Players,
+          cards: state.cards,
+          gameData: state.gameData,
+          eventLogs: state.eventLogs));
+      // repositoryTO.syncScoreBoard(
+      //     state.timer,
+      //     state.shotclock,
+      //     state.score1,
+      //     state.score2,
+      //     Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
     }
   }
 
@@ -701,7 +763,15 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void addCardNoPlayer(PlayerGame player, int card) {
-    PlayerGame temp = PlayerGame("", Player("", player.player.team, -1, getRandomString(1), getRandomString(1), false), 0, 0, 0, 0, 0);
+    PlayerGame temp = PlayerGame(
+        "",
+        Player("", player.player.team, -1, getRandomString(1),
+            getRandomString(1), false),
+        0,
+        0,
+        0,
+        0,
+        0);
     addCard(temp, card);
     logEvent(card * 2 + 1, "Adding card for non existent player", temp.player);
   }
@@ -842,12 +912,14 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void pushServer() {
-    repositoryTo.pushResult(ReturnData(game, state.team1Players, state.team2Players, state.eventLogs));
+    repositoryTo.pushResult(ReturnData(
+        game, state.team1Players, state.team2Players, state.eventLogs));
     backup(state);
   }
 
   void logEvent(int eventCode, String description, Player player) {
-    state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(), eventCode, description, player));
+    state.eventLogs.add(EventLog(state.timer, state.period, DateTime.now(),
+        eventCode, description, player));
   }
 
   ScoreboardTOState giveState() {

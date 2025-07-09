@@ -28,7 +28,7 @@ class ScoreBoardTO extends StatelessWidget {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(35.0),
           child: AppBar(
-            title: Text('GameAdmin - github.com/debber1/GameAdmin -- TO MODE'),
+            title: Text('Tournament De Paddel 2025'),
             actions: <Widget>[
               PopupMenuButton<String>(
                 onSelected: (choice) => handleClick(choice, context),
@@ -302,17 +302,51 @@ class ScoreBoardTO extends StatelessWidget {
                                 // ignore: prefer_const_literals_to_create_immutables
                                 children: <Widget>[
                                   Expanded(
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text(
-                                        breakAlert(
-                                            context,
-                                            state.timer,
-                                            state.breakLength,
-                                            state.period,
-                                            state.breakActive,
-                                            state.periodLength,
-                                            (state.score1 == state.score2)),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        String twoDigits(int n) =>
+                                            n.toString().padLeft(2, "0");
+                                        String twoDigitMinutes = twoDigits(
+                                            Duration(seconds: state.timer)
+                                                .inMinutes
+                                                .remainder(60));
+                                        String twoDigitSeconds = twoDigits(
+                                            Duration(seconds: state.timer)
+                                                .inSeconds
+                                                .remainder(60));
+                                        TimeOfDay? newTime =
+                                            await showTimePicker(
+                                          initialTime: TimeOfDay(
+                                              hour: int.parse(twoDigitMinutes),
+                                              minute:
+                                                  int.parse(twoDigitSeconds)),
+                                          hourLabelText: "Minutes",
+                                          minuteLabelText: "Seconds",
+                                          initialEntryMode:
+                                              TimePickerEntryMode.input,
+                                          context: context,
+                                        );
+                                        if (newTime != null) {
+                                          int newTimeSeconds =
+                                              newTime.hour * 60 +
+                                                  newTime.minute;
+                                          BlocProvider.of<ScoreboardTOCubit>(
+                                                  context)
+                                              .setTimer(newTimeSeconds);
+                                        }
+                                      },
+                                      child: FittedBox(
+                                        fit: BoxFit.contain,
+                                        child: Text(
+                                          breakAlert(
+                                              context,
+                                              state.timer,
+                                              state.breakLength,
+                                              state.period,
+                                              state.breakActive,
+                                              state.periodLength,
+                                              (state.score1 == state.score2)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -394,8 +428,34 @@ class ScoreBoardTO extends StatelessWidget {
                                 flex: 3,
                                 child: FittedBox(
                                   fit: BoxFit.contain,
-                                  child: Text(
-                                    shotClockAlert(context, state.shotclock),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      String twoDigits(int n) =>
+                                          n.toString().padLeft(2, "0");
+                                      String twoDigitSeconds = twoDigits(
+                                          Duration(seconds: state.shotclock)
+                                              .inSeconds);
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        initialTime: TimeOfDay(
+                                            hour: 0,
+                                            minute: int.parse(twoDigitSeconds)),
+                                        hourLabelText: "Minutes",
+                                        minuteLabelText: "Seconds",
+                                        initialEntryMode:
+                                            TimePickerEntryMode.input,
+                                        context: context,
+                                      );
+                                      if (newTime != null) {
+                                        int newTimeSeconds =
+                                            newTime.hour * 60 + newTime.minute;
+                                        BlocProvider.of<ScoreboardTOCubit>(
+                                                context)
+                                            .setShotclockTimer(newTimeSeconds);
+                                      }
+                                    },
+                                    child: Text(
+                                      shotClockAlert(context, state.shotclock),
+                                    ),
                                   ),
                                 ),
                               ),

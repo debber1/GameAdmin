@@ -38,7 +38,7 @@ class ScoreBoard extends StatelessWidget {
             preferredSize: Size.fromHeight(35.0),
             child: AppBar(
               backgroundColor: Colors.grey.shade300,
-              title: Text('Tournament De Paddel 2024'),
+              title: Text('Tournament De Paddel 2025'),
               actions: <Widget>[
                 PopupMenuButton<String>(
                   onSelected: (choice) => handleClick(choice, context),
