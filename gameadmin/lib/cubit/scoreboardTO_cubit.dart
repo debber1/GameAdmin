@@ -366,12 +366,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           cards: state.cards,
           gameData: state.gameData,
           eventLogs: state.eventLogs));
-      // repositoryTO.syncScoreBoard(
-      //     state.timer,
-      //     state.shotclock,
-      //     state.score1,
-      //     state.score2,
-      //     Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+      repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+          state.score2, state.gameData.pitch);
     }
   }
 
@@ -396,12 +392,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           cards: state.cards,
           gameData: state.gameData,
           eventLogs: state.eventLogs));
-      // repositoryTO.syncScoreBoard(
-      //     state.timer,
-      //     state.shotclock,
-      //     state.score1,
-      //     state.score2,
-      //     Pitch("1", "placeHolder", true, true, "John Doe", temp_ip));
+      repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+          state.score2, state.gameData.pitch);
     }
   }
 
