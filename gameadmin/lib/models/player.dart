@@ -23,7 +23,7 @@ class Player {
         : Team('', Division('', '', true, ''), Country('', '', '', ''), '', '',
             false, '', '');
 
-    final number = int.parse(data['number']) as int;
+    final number = data['number'] as int;
     if (number == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "number" is missing');
@@ -41,7 +41,7 @@ class Player {
       throw UnsupportedError('Invalid data: $data -> "lastName" is missing');
     }
 
-    final captain = parseBool(data['captain']);
+    final captain = data['captain'];
     if (captain == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "captain" is missing');
@@ -54,10 +54,10 @@ class Player {
     return {
       'id': id,
       'team': team.toJson(),
-      'number': number.toString(),
+      'number': number,
       'firstName': firstName,
       'lastName': lastName,
-      'captain': captain.toString(),
+      'captain': captain,
     };
   }
 

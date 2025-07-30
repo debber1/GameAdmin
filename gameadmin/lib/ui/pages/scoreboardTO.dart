@@ -14,6 +14,7 @@ class ScoreBoardTO extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ScoreboardTOCubit>(context).allowTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).shotclockTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).mainTimer();
     BlocProvider.of<ScoreboardTOCubit>(context).setstate();
@@ -22,239 +23,223 @@ class ScoreBoardTO extends StatelessWidget {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    return MaterialApp(
-      title: 'GameAdmin',
-      home: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(35.0),
-          child: AppBar(
-            title: Text('Tournament De Paddel 2025'),
-            actions: <Widget>[
-              PopupMenuButton<String>(
-                onSelected: (choice) => handleClick(choice, context),
-                itemBuilder: (BuildContext context) {
-                  return {
-                    'Reset timer',
-                    'Reset game',
-                    'Switch sides',
-                    'Back to settings',
-                    'Game sheet'
-                  }.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
+    return WillPopScope(
+        onWillPop: () async {
+          // Returning true allows the pop to happen, returning false prevents it.
+          BlocProvider.of<ScoreboardTOCubit>(context).pauseTimer();
+          BlocProvider.of<ScoreboardTOCubit>(context).killTimer();
+          BlocProvider.of<ScoreboardTOCubit>(context).close();
+          Navigator.pop(context);
+          return true;
+        },
+        child: MaterialApp(
+          title: 'GameAdmin',
+          home: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(35.0),
+              child: AppBar(
+                title: Text('Tournament De Paddel 2025'),
+                actions: <Widget>[
+                  PopupMenuButton<String>(
+                    onSelected: (choice) => handleClick(choice, context),
+                    itemBuilder: (BuildContext context) {
+                      return {
+                        'Reset timer',
+                        'Reset game',
+                        'Switch sides',
+                        'Back to settings',
+                        'Game sheet'
+                      }.map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        body: BlocBuilder<ScoreboardTOCubit, ScoreboardTOState>(
-          builder: (context, state) {
-            return Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      flex: 2, child: Container()), //spacing on the left side
-                  Expanded(
-                    flex: 50,
-                    child: Container(
-                      //First column of three
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 8,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 8.0, top: 8.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(
-                                                  state.team1.country.flag)),
-                                          color: Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 25,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
+            ),
+            body: BlocBuilder<ScoreboardTOCubit, ScoreboardTOState>(
+              builder: (context, state) {
+                return Container(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          flex: 2,
+                          child: Container()), //spacing on the left side
+                      Expanded(
+                        flex: 50,
+                        child: Container(
+                          //First column of three
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 8,
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 5,
-                                            left: 5,
-                                            right: 5),
-                                        child: Text(
-                                          state.team1.name,
+                                            bottom: 8.0, top: 8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(state
+                                                      .team1.country.flag)),
+                                              color: Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                         ),
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 7,
-                                  child: InkWell(
-                                    onTap: () {
-                                      _showDialogNoScore(
-                                          context,
-                                          "Who has too many goals?",
-                                          "Decrement Goal",
-                                          state.team1Players,
-                                          1);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Colors.redAccent.withOpacity(0.7),
-                                        borderRadius: BorderRadius.horizontal(
-                                            left: Radius.circular(10)),
-                                      ),
-                                      child: Center(
-                                        child: Icon(Icons.remove),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: InkWell(
-                                    onTap: () {
-                                      _showDialogScore(
-                                          context,
-                                          "Who scored the goal?",
-                                          "Increment Goal",
-                                          state.team1Players,
-                                          1);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.7),
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)),
-                                      ),
-                                      child: Center(
-                                        child: Icon(Icons.add),
-                                      ),
+                                    Expanded(
+                                      flex: 25,
+                                      child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 5,
+                                                bottom: 5,
+                                                left: 5,
+                                                right: 5),
+                                            child: Text(
+                                              state.team1.name,
+                                            ),
+                                          )),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              flex: 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 7,
                                       child: InkWell(
                                         onTap: () {
-                                          _showDialogCard(
+                                          _showDialogNoScore(
                                               context,
-                                              "Green Card",
-                                              "Green Card",
+                                              "Who has too many goals?",
+                                              "Decrement Goal",
                                               state.team1Players,
                                               1);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                            color: Colors.redAccent
+                                                .withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.horizontal(
+                                                    left: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.remove),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
+                                    Expanded(
+                                      flex: 7,
                                       child: InkWell(
                                         onTap: () {
-                                          _showDialogCard(
+                                          _showDialogScore(
                                               context,
-                                              "Yellow Card",
-                                              "Yellow Card",
+                                              "Who scored the goal?",
+                                              "Increment Goal",
                                               state.team1Players,
-                                              2);
+                                              1);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                            color:
+                                                Colors.green.withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.horizontal(
+                                                    right: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.add),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
-                                      child: InkWell(
-                                        onTap: () {
-                                          _showDialogCard(
-                                              context,
-                                              "Red Card",
-                                              "Red Card",
-                                              state.team1Players,
-                                              3);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 5,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Green Card",
+                                                  "Green Card",
+                                                  state.team1Players,
+                                                  1);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
-                                      child: InkWell(
-                                        onTap: () {
-                                          _showDialogCard(
-                                              context,
-                                              "Red EJECTION Card",
-                                              "Red EJECTION Card",
-                                              state.team1Players,
-                                              4);
-                                        },
-                                        child: ClipRRect(
-                                          child: Banner(
-                                            message: 'Ejection',
-                                            location: BannerLocation.topEnd,
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Yellow Card",
+                                                  "Yellow Card",
+                                                  state.team1Players,
+                                                  2);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.yellow,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Red Card",
+                                                  "Red Card",
+                                                  state.team1Players,
+                                                  3);
+                                            },
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: Colors.red,
@@ -264,489 +249,506 @@ class ScoreBoardTO extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Expanded(
-                              flex: 6,
-                              child: Container(
-                                child: _cardDisplay(
-                                    context, state.team1, state.cards),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2, child: Container()), //spacing on the right side
-                  Expanded(
-                    //Second column of three
-                    flex: 40,
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(flex: 1, child: Container()),
-                        Expanded(
-                          flex: 14,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: Center(
-                              child: Column(
-                                // ignore: prefer_const_literals_to_create_immutables
-                                children: <Widget>[
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        String twoDigits(int n) =>
-                                            n.toString().padLeft(2, "0");
-                                        String twoDigitMinutes = twoDigits(
-                                            Duration(seconds: state.timer)
-                                                .inMinutes
-                                                .remainder(60));
-                                        String twoDigitSeconds = twoDigits(
-                                            Duration(seconds: state.timer)
-                                                .inSeconds
-                                                .remainder(60));
-                                        TimeOfDay? newTime =
-                                            await showTimePicker(
-                                          initialTime: TimeOfDay(
-                                              hour: int.parse(twoDigitMinutes),
-                                              minute:
-                                                  int.parse(twoDigitSeconds)),
-                                          hourLabelText: "Minutes",
-                                          minuteLabelText: "Seconds",
-                                          initialEntryMode:
-                                              TimePickerEntryMode.input,
-                                          context: context,
-                                        );
-                                        if (newTime != null) {
-                                          int newTimeSeconds =
-                                              newTime.hour * 60 +
-                                                  newTime.minute;
-                                          BlocProvider.of<ScoreboardTOCubit>(
-                                                  context)
-                                              .setTimer(newTimeSeconds);
-                                        }
-                                      },
-                                      child: FittedBox(
-                                        fit: BoxFit.contain,
-                                        child: Text(
-                                          breakAlert(
-                                              context,
-                                              state.timer,
-                                              state.breakLength,
-                                              state.period,
-                                              state.breakActive,
-                                              state.periodLength,
-                                              (state.score1 == state.score2)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text(
-                                        state.score1.toString() +
-                                            "-" +
-                                            state.score2.toString(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: InkWell(
-                            onTap: () {
-                              BlocProvider.of<ScoreboardTOCubit>(context)
-                                  .startTimer();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: Center(
-                                child: Text("Start"),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: InkWell(
-                            onTap: () {
-                              BlocProvider.of<ScoreboardTOCubit>(context)
-                                  .pauseTimer();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: Center(
-                                child: Text("Time out"),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                        Expanded(
-                          flex: 10,
-                          child: Row(
-                            // ignore: prefer_const_literals_to_create_immutables
-                            children: <Widget>[
-                              Expanded(
-                                flex: 3,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: InkWell(
-                                    onTap: () async {
-                                      String twoDigits(int n) =>
-                                          n.toString().padLeft(2, "0");
-                                      String twoDigitSeconds = twoDigits(
-                                          Duration(seconds: state.shotclock)
-                                              .inSeconds);
-                                      TimeOfDay? newTime = await showTimePicker(
-                                        initialTime: TimeOfDay(
-                                            hour: 0,
-                                            minute: int.parse(twoDigitSeconds)),
-                                        hourLabelText: "Minutes",
-                                        minuteLabelText: "Seconds",
-                                        initialEntryMode:
-                                            TimePickerEntryMode.input,
-                                        context: context,
-                                      );
-                                      if (newTime != null) {
-                                        int newTimeSeconds =
-                                            newTime.hour * 60 + newTime.minute;
-                                        BlocProvider.of<ScoreboardTOCubit>(
-                                                context)
-                                            .setShotclockTimer(newTimeSeconds);
-                                      }
-                                    },
-                                    child: Text(
-                                      shotClockAlert(context, state.shotclock),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                  flex: 5,
-                                  child: Column(
-                                    children: <Widget>[
                                       Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)),
-                                          ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
                                           child: InkWell(
                                             onTap: () {
-                                              if (state.shotclockShouldRun) {
-                                                BlocProvider.of<
-                                                            ScoreboardTOCubit>(
-                                                        context)
-                                                    .pauseShotclock();
-                                              } else {
-                                                BlocProvider.of<
-                                                            ScoreboardTOCubit>(
-                                                        context)
-                                                    .startShotclock();
-                                              }
+                                              _showDialogCard(
+                                                  context,
+                                                  "Red EJECTION Card",
+                                                  "Red EJECTION Card",
+                                                  state.team1Players,
+                                                  4);
                                             },
-                                            child: Center(
-                                              child: Text(startOrStop(
-                                                  state.shotclockShouldRun)),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(),
-                                      ),
-                                      Expanded(
-                                        flex: 5,
-                                        child: InkWell(
-                                          onTap: () {
-                                            BlocProvider.of<ScoreboardTOCubit>(
-                                                    context)
-                                                .resetShotclock();
-                                            BlocProvider.of<ScoreboardTOCubit>(
-                                                    context)
-                                                .startShotclock();
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.grey,
+                                            child: ClipRRect(
+                                              child: Banner(
+                                                message: 'Ejection',
+                                                location: BannerLocation.topEnd,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                ),
                                               ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)),
-                                            ),
-                                            child: Center(
-                                              child: Text("Reset"),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
-                                  ))
+                                  )),
+                              Expanded(
+                                  flex: 6,
+                                  child: Container(
+                                    child: _cardDisplay(
+                                        context, state.team1, state.cards),
+                                  )),
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 5,
-                          child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 5, bottom: 5, right: 5, left: 5),
-                                child: Text(
-                                  periodIndicator(
-                                      state.period, state.breakActive),
+                      ),
+                      Expanded(
+                          flex: 2,
+                          child: Container()), //spacing on the right side
+                      Expanded(
+                        //Second column of three
+                        flex: 40,
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(flex: 1, child: Container()),
+                            Expanded(
+                              flex: 14,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
                                 ),
-                              )),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(flex: 2, child: Container()),
-                  Expanded(
-                    //third column of three
-                    flex: 50,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 8,
+                                child: Center(
+                                  child: Column(
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () async {
+                                            String twoDigits(int n) =>
+                                                n.toString().padLeft(2, "0");
+                                            String twoDigitMinutes = twoDigits(
+                                                Duration(seconds: state.timer)
+                                                    .inMinutes
+                                                    .remainder(60));
+                                            String twoDigitSeconds = twoDigits(
+                                                Duration(seconds: state.timer)
+                                                    .inSeconds
+                                                    .remainder(60));
+                                            TimeOfDay? newTime =
+                                                await showTimePicker(
+                                              initialTime: TimeOfDay(
+                                                  hour: int.parse(
+                                                      twoDigitMinutes),
+                                                  minute: int.parse(
+                                                      twoDigitSeconds)),
+                                              hourLabelText: "Minutes",
+                                              minuteLabelText: "Seconds",
+                                              initialEntryMode:
+                                                  TimePickerEntryMode.input,
+                                              context: context,
+                                            );
+                                            if (newTime != null) {
+                                              int newTimeSeconds =
+                                                  newTime.hour * 60 +
+                                                      newTime.minute;
+                                              BlocProvider.of<
+                                                          ScoreboardTOCubit>(
+                                                      context)
+                                                  .setTimer(newTimeSeconds);
+                                            }
+                                          },
+                                          child: FittedBox(
+                                            fit: BoxFit.contain,
+                                            child: Text(
+                                              breakAlert(
+                                                  context,
+                                                  state.timer,
+                                                  state.breakLength,
+                                                  state.period,
+                                                  state.breakActive,
+                                                  state.periodLength,
+                                                  (state.score1 ==
+                                                      state.score2)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Text(
+                                            state.score1.toString() +
+                                                "-" +
+                                                state.score2.toString(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: InkWell(
+                                onTap: () {
+                                  BlocProvider.of<ScoreboardTOCubit>(context)
+                                      .startTimer();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Center(
+                                    child: Text("Start"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: InkWell(
+                                onTap: () {
+                                  BlocProvider.of<ScoreboardTOCubit>(context)
+                                      .pauseTimer();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Center(
+                                    child: Text("Time out"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(),
+                            ),
+                            Expanded(
+                              flex: 10,
+                              child: Row(
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 3,
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          String twoDigits(int n) =>
+                                              n.toString().padLeft(2, "0");
+                                          String twoDigitSeconds = twoDigits(
+                                              Duration(seconds: state.shotclock)
+                                                  .inSeconds);
+                                          TimeOfDay? newTime =
+                                              await showTimePicker(
+                                            initialTime: TimeOfDay(
+                                                hour: 0,
+                                                minute:
+                                                    int.parse(twoDigitSeconds)),
+                                            hourLabelText: "Minutes",
+                                            minuteLabelText: "Seconds",
+                                            initialEntryMode:
+                                                TimePickerEntryMode.input,
+                                            context: context,
+                                          );
+                                          if (newTime != null) {
+                                            int newTimeSeconds =
+                                                newTime.hour * 60 +
+                                                    newTime.minute;
+                                            BlocProvider.of<ScoreboardTOCubit>(
+                                                    context)
+                                                .setShotclockTimer(
+                                                    newTimeSeconds);
+                                          }
+                                        },
+                                        child: Text(
+                                          shotClockAlert(
+                                              context, state.shotclock),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      flex: 5,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Expanded(
+                                            flex: 5,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)),
+                                              ),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  if (state
+                                                      .shotclockShouldRun) {
+                                                    BlocProvider.of<
+                                                                ScoreboardTOCubit>(
+                                                            context)
+                                                        .pauseShotclock();
+                                                  } else {
+                                                    BlocProvider.of<
+                                                                ScoreboardTOCubit>(
+                                                            context)
+                                                        .startShotclock();
+                                                  }
+                                                },
+                                                child: Center(
+                                                  child: Text(startOrStop(state
+                                                      .shotclockShouldRun)),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(),
+                                          ),
+                                          Expanded(
+                                            flex: 5,
+                                            child: InkWell(
+                                              onTap: () {
+                                                BlocProvider.of<
+                                                            ScoreboardTOCubit>(
+                                                        context)
+                                                    .resetShotclock();
+                                                BlocProvider.of<
+                                                            ScoreboardTOCubit>(
+                                                        context)
+                                                    .startShotclock();
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.grey,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                ),
+                                                child: Center(
+                                                  child: Text("Reset"),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ))
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: FittedBox(
+                                  fit: BoxFit.contain,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        bottom: 8.0, top: 8.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(
-                                                  state.team2.country.flag)),
-                                          color: Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
+                                        top: 5, bottom: 5, right: 5, left: 5),
+                                    child: Text(
+                                      periodIndicator(
+                                          state.period, state.breakActive),
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 25,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
+                                  )),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(flex: 2, child: Container()),
+                      Expanded(
+                        //third column of three
+                        flex: 50,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 8,
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 5,
-                                            left: 5,
-                                            right: 5),
-                                        child: Text(
-                                          state.team2.name,
-                                        ),
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 7,
-                                  child: InkWell(
-                                    onTap: () {
-                                      _showDialogNoScore(
-                                          context,
-                                          "Who has too many goals?",
-                                          "Decrement Goal",
-                                          state.team2Players,
-                                          2);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Colors.redAccent.withOpacity(0.7),
-                                        borderRadius: BorderRadius.horizontal(
-                                            left: Radius.circular(10)),
-                                      ),
-                                      child: Center(
-                                        child: Icon(Icons.remove),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 7,
-                                  child: InkWell(
-                                    onTap: () {
-                                      _showDialogScore(
-                                          context,
-                                          "Who scored the goal?",
-                                          "Increment Goal",
-                                          state.team2Players,
-                                          2);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.7),
-                                        borderRadius: BorderRadius.horizontal(
-                                            right: Radius.circular(10)),
-                                      ),
-                                      child: Center(
-                                        child: Icon(Icons.add),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              flex: 5,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
-                                      child: InkWell(
-                                        onTap: () {
-                                          _showDialogCard(
-                                              context,
-                                              "Green Card",
-                                              "Green Card",
-                                              state.team2Players,
-                                              1);
-                                        },
+                                            bottom: 8.0, top: 8.0),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.green,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(state
+                                                      .team2.country.flag)),
+                                              color: Colors.blue,
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
+                                    Expanded(
+                                      flex: 25,
+                                      child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 5,
+                                                bottom: 5,
+                                                left: 5,
+                                                right: 5),
+                                            child: Text(
+                                              state.team2.name,
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 7,
                                       child: InkWell(
                                         onTap: () {
-                                          _showDialogCard(
+                                          _showDialogNoScore(
                                               context,
-                                              "Yellow Card",
-                                              "Yellow Card",
+                                              "Who has too many goals?",
+                                              "Decrement Goal",
                                               state.team2Players,
                                               2);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.yellow,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                            color: Colors.redAccent
+                                                .withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.horizontal(
+                                                    left: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.remove),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
+                                    Expanded(
+                                      flex: 7,
                                       child: InkWell(
                                         onTap: () {
-                                          _showDialogCard(
+                                          _showDialogScore(
                                               context,
-                                              "Red Card",
-                                              "Red Card",
+                                              "Who scored the goal?",
+                                              "Increment Goal",
                                               state.team2Players,
-                                              3);
+                                              2);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                            color:
+                                                Colors.green.withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.horizontal(
+                                                    right: Radius.circular(10)),
+                                          ),
+                                          child: Center(
+                                            child: Icon(Icons.add),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 8.0,
-                                          top: 8.0,
-                                          right: 2,
-                                          left: 2),
-                                      child: InkWell(
-                                        onTap: () {
-                                          _showDialogCard(
-                                              context,
-                                              "Red EJECTION Card",
-                                              "Red EJECTION Card",
-                                              state.team2Players,
-                                              4);
-                                        },
-                                        child: ClipRRect(
-                                          child: Banner(
-                                            message: 'Ejection',
-                                            location: BannerLocation.topEnd,
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  flex: 5,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Green Card",
+                                                  "Green Card",
+                                                  state.team2Players,
+                                                  1);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Yellow Card",
+                                                  "Yellow Card",
+                                                  state.team2Players,
+                                                  2);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.yellow,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Red Card",
+                                                  "Red Card",
+                                                  state.team2Players,
+                                                  3);
+                                            },
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: Colors.red,
@@ -756,29 +758,59 @@ class ScoreBoardTO extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Expanded(
-                            flex: 6,
-                            child: Container(
-                              child: _cardDisplay(
-                                  context, state.team2, state.cards),
-                            ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0,
+                                              top: 8.0,
+                                              right: 2,
+                                              left: 2),
+                                          child: InkWell(
+                                            onTap: () {
+                                              _showDialogCard(
+                                                  context,
+                                                  "Red EJECTION Card",
+                                                  "Red EJECTION Card",
+                                                  state.team2Players,
+                                                  4);
+                                            },
+                                            child: ClipRRect(
+                                              child: Banner(
+                                                message: 'Ejection',
+                                                location: BannerLocation.topEnd,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                              Expanded(
+                                flex: 6,
+                                child: Container(
+                                  child: _cardDisplay(
+                                      context, state.team2, state.cards),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Expanded(flex: 2, child: Container()),
+                    ],
                   ),
-                  Expanded(flex: 2, child: Container()),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-    );
+                );
+              },
+            ),
+          ),
+        ));
   }
 
   Widget _updateBtn(context, IconData icon, int widthFlex) {

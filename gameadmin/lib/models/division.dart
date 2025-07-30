@@ -18,7 +18,7 @@ class Division {
       throw UnsupportedError('Invalid data: $data -> "name" is missing');
     }
 
-    final shotClock = parseBool(data['shotClock']) as bool;
+    final shotClock = data['shotClock'] as bool;
     if (shotClock == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "shotClock" is missing');
@@ -37,7 +37,7 @@ class Division {
     return {
       'id': id,
       'name': name,
-      'shotClock': shotClock.toString(),
+      'shotClock': shotClock,
       'shortName': shortName,
     };
   }

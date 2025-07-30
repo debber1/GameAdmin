@@ -20,13 +20,13 @@ class Pitch {
       throw UnsupportedError('Invalid data: $data -> "name" is missing');
     }
 
-    final shotClock = parseBool(data['shotClock']) as bool;
+    final shotClock = data['shotClock'] as bool;
     if (shotClock == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "shotClock" is missing');
     }
 
-    final finalePitch = parseBool(data['finalePitch']) as bool;
+    final finalePitch = data['finalePitch'] as bool;
     if (finalePitch == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "finalePitch" is missing');
@@ -51,8 +51,8 @@ class Pitch {
     return {
       'id': id,
       'name': name,
-      'shotClock': shotClock.toString(),
-      'finalePitch': finalePitch.toString(),
+      'shotClock': shotClock,
+      'finalePitch': finalePitch,
       'pitchResponsable': pitchResponsable,
       'scoreIP': scoreIP,
     };

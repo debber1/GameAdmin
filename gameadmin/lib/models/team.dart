@@ -40,7 +40,7 @@ class Team {
       throw UnsupportedError('Invalid data: $data -> "language" is missing');
     }
 
-    final forfaitTeam = parseBool(data['forfaitTeam']) as bool;
+    final forfaitTeam = data['forfaitTeam'] as bool;
     if (forfaitTeam == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "forfaitTeam" is missing');
@@ -69,7 +69,7 @@ class Team {
       'country': country.toJson(),
       'name': name,
       'language': language,
-      'forfaitTeam': forfaitTeam.toString(),
+      'forfaitTeam': forfaitTeam,
       'pfdColour1': pfdColour1,
       'pfdColour2': pfdColour2,
     };

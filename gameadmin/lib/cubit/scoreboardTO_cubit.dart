@@ -54,6 +54,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       } else {
         emit(saveState);
       }
+      repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+          state.score2, state.gameData.pitch);
     });
   }
 
@@ -99,6 +101,9 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           gameData: state.gameData,
           eventLogs: state.eventLogs));
     }
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
+
     fixGoal();
   }
 
@@ -144,15 +149,67 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           gameData: state.gameData,
           eventLogs: state.eventLogs));
     }
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
+
     fixGoal();
+  }
+
+  void killTimer() {
+    emit(ScoreboardTOState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score1,
+        score2: state.score2,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        cancelTimer: true,
+        team1: state.team1,
+        team2: state.team2,
+        team1Players: state.team1Players,
+        team2Players: state.team2Players,
+        cards: state.cards,
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
+  }
+
+  void allowTimer() {
+    emit(ScoreboardTOState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score1,
+        score2: state.score2,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        cancelTimer: false,
+        team1: state.team1,
+        team2: state.team2,
+        team1Players: state.team1Players,
+        team2Players: state.team2Players,
+        cards: state.cards,
+        gameData: state.gameData,
+        eventLogs: state.eventLogs));
   }
 
   void mainTimer() {
     if (!state.timerRunning) {
+      repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+          state.score2, state.gameData.pitch);
       Timer? timer;
       timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (state.timerShouldRun) {
           if (state.timer == 0 && !state.breakActive && state.period == 1) {
+            repositoryTo.soundHornMain(2, 6, state.gameData.pitch);
             startBreak();
             return;
           }
@@ -161,11 +218,18 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
             return;
           }
           if (state.timer == 0 && state.period >= 2) {
+            repositoryTo.soundHornMain(3, 6, state.gameData.pitch);
             pauseTimer();
             return;
           }
           if (!state.breakActive) {
             timeCards();
+          }
+          if (state.shotclock == 20) {
+            repositoryTo.soundShotClockHorn(1, 5, state.gameData.pitch);
+          }
+          if (state.shotclock == 0) {
+            repositoryTo.soundShotClockHorn(2, 5, state.gameData.pitch);
           }
           // Backup every 10 sec in case of a crash
           // Send the game data to the scoreboard
@@ -192,8 +256,12 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
               gameData: state.gameData,
               eventLogs: state.eventLogs));
         }
+        // after all is done, inform the score boards
         repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
             state.score2, state.gameData.pitch);
+        if (state.cancelTimer ?? false) {
+          timer.cancel();
+        }
       });
     }
   }
@@ -227,12 +295,20 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
                 gameData: state.gameData,
                 eventLogs: state.eventLogs));
           }
+          if (!state.timerShouldRun) {
+            repositoryTo.syncScoreBoard(state.timer, state.shotclock,
+                state.score1, state.score2, state.gameData.pitch);
+          }
+        }
+        if (state.cancelTimer ?? false) {
+          timer.cancel();
         }
       });
     }
   }
 
   void startTimer() {
+    startShotclock();
     emit(ScoreboardTOState(
         timer: state.timer,
         shotclock: state.shotclock,
@@ -252,9 +328,12 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         cards: state.cards,
         gameData: state.gameData,
         eventLogs: state.eventLogs));
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void pauseTimer() {
+    pauseShotclock();
     emit(ScoreboardTOState(
         timer: state.timer,
         shotclock: state.shotclock,
@@ -274,6 +353,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         cards: state.cards,
         gameData: state.gameData,
         eventLogs: state.eventLogs));
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void resetTimer() {
@@ -319,6 +400,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           gameData: state.gameData,
           eventLogs: state.eventLogs));
     }
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void changeTimer(int amount) {
@@ -343,6 +426,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           gameData: state.gameData,
           eventLogs: state.eventLogs));
     }
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void setTimer(int newTime) {
@@ -418,6 +503,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         gameData: state.gameData,
         eventLogs: state.eventLogs));
     fixGoal();
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void restartPeriod() {
@@ -441,6 +528,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         gameData: state.gameData,
         eventLogs: state.eventLogs));
     fixGoal();
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void startShotclock() {
@@ -463,6 +552,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         cards: state.cards,
         gameData: state.gameData,
         eventLogs: state.eventLogs));
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void pauseShotclock() {
@@ -485,6 +576,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         cards: state.cards,
         gameData: state.gameData,
         eventLogs: state.eventLogs));
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void resetShotclock() {
@@ -507,6 +600,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         cards: state.cards,
         gameData: state.gameData,
         eventLogs: state.eventLogs));
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void changeShotclock(int amount) {
@@ -530,6 +625,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           cards: state.cards,
           gameData: state.gameData,
           eventLogs: state.eventLogs));
+      repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+          state.score2, state.gameData.pitch);
     }
   }
 
@@ -592,6 +689,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
           eventLogs: state.eventLogs));
     }
     fixGoal();
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void extensions(int length) {
@@ -615,6 +714,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         gameData: state.gameData,
         eventLogs: state.eventLogs));
     fixGoal();
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void switchSides() {
@@ -638,6 +739,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
         gameData: state.gameData,
         eventLogs: state.eventLogs));
     fixGoal();
+    repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
+        state.score2, state.gameData.pitch);
   }
 
   void fetchPlayers() {

@@ -99,19 +99,19 @@ class Game {
       throw UnsupportedError('Invalid data: $data -> "scoreTeam2" is missing');
     }
 
-    final played = parseBool(data['played']) as bool;
+    final played = data['played'] as bool;
     if (played == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "played" is missing');
     }
 
-    final drawAllowed = parseBool(data['drawAllowed']) as bool;
+    final drawAllowed = data['drawAllowed'] as bool;
     if (drawAllowed == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "drawAllowed" is missing');
     }
 
-    final forfait = parseBool(data['forfait']) as bool;
+    final forfait = data['forfait'] as bool;
     if (forfait == null) {
       // Data vallidation
       throw UnsupportedError('Invalid data: $data -> "forfait" is missing');
@@ -177,9 +177,9 @@ class Game {
       'timeFollowNumber': timeFollowNumber.toString(),
       'scoreTeam1': scoreTeam1.toString(),
       'scoreTeam2': scoreTeam2.toString(),
-      'played': played.toString(),
-      'drawAllowed': drawAllowed.toString(),
-      'forfait': forfait.toString(),
+      'played': played,
+      'drawAllowed': drawAllowed,
+      'forfait': forfait,
       'round': round.toString(),
       'idGroupRef': idGroupRef,
       'positionRef': positionRef,

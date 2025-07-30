@@ -12,6 +12,7 @@ class ScoreboardTOState {
   bool timerShouldRun;
   bool breakActive;
   bool shotclockShouldRun;
+  bool? cancelTimer;
   Team team1;
   Team team2;
   List<PlayerGame> team1Players;
@@ -32,6 +33,7 @@ class ScoreboardTOState {
       required this.timerShouldRun,
       required this.breakActive,
       required this.shotclockShouldRun,
+      this.cancelTimer,
       required this.team1,
       required this.team2,
       required this.team1Players,
@@ -121,6 +123,7 @@ class ScoreboardTOState {
         timerShouldRun: parseBool(timerShouldRun),
         breakActive: parseBool(breakActive),
         shotclockShouldRun: parseBool(shotclockShouldRun),
+        cancelTimer: false,
         team1: team1,
         team2: team2,
         team1Players: team1Players,
@@ -142,6 +145,7 @@ class ScoreboardTOState {
       'timerShouldRun': timerShouldRun.toString(),
       'breakActive': breakActive.toString(),
       'shotclockShouldRun': shotclockShouldRun.toString(),
+      'cancelTimer': cancelTimer.toString(),
       'team1': team1.toJson(),
       'team2': team2.toJson(),
       'team1Players': team1Players.map((e) => e.toJson()).toList(),
@@ -167,6 +171,7 @@ class ScoreboardTOInitial extends ScoreboardTOState {
             timerShouldRun: false,
             breakActive: false,
             shotclockShouldRun: false,
+            cancelTimer: false,
             team1: Team('', Division('', '', true, ''), Country('', '', '', ''),
                 '', '', false, '', ''),
             team2: Team('', Division('', '', true, ''), Country('', '', '', ''),
