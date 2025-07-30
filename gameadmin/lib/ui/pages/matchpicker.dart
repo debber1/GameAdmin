@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gameadmin/cubit/matchpicker_cubit.dart';
+import 'package:gameadmin/models/game.dart';
 import 'package:gameadmin/util/constants.dart';
 
 class MatchPicker extends StatelessWidget {
@@ -45,12 +46,11 @@ class MatchPicker extends StatelessWidget {
                           itemCount: state.games.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
-                                onTap: () => Navigator.pushNamed(
-                                    context, tournamentOrganiserRoute,
-                                    arguments: state.games[index]),
+                                onTap: () =>
+                                    startGame(state.games[index], context),
                                 child: Container(
                                   height: 100,
-                                  color: Colors.grey.shade300,
+                                  color: bgColourForMatch(state.games[index]),
                                   child: Center(
                                     child: Row(
                                       children: [
@@ -339,5 +339,18 @@ class MatchPicker extends StatelessWidget {
       return Icons.check_box;
     }
     return Icons.warning;
+  }
+
+  Color bgColourForMatch(Game game) {
+    if (game.played == false) {
+      return Colors.grey.shade300;
+    }
+    return Colors.blueGrey.shade600;
+  }
+
+  void startGame(Game game, BuildContext context) {
+    if (game.played == false) {
+      Navigator.pushNamed(context, tournamentOrganiserRoute, arguments: game);
+    }
   }
 }
