@@ -899,13 +899,35 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
   }
 
   void timeCards() {
-    for (var card in state.cards) {
+    var toRemove = [];
+    state.cards.forEach((card) {
       if (card.timeLeft == 0) {
-        endCard(card);
+        fixPlayerCard(card);
+        toRemove.add(card);
       } else {
         card.timeLeft--;
       }
-    }
+    });
+    state.cards.removeWhere((e) => toRemove.contains(e));
+    emit((ScoreboardTOState(
+        timer: state.timer,
+        shotclock: state.shotclock,
+        breakLength: state.breakLength,
+        periodLength: state.periodLength,
+        score1: state.score1,
+        score2: state.score2,
+        period: state.period,
+        timerRunning: state.timerRunning,
+        timerShouldRun: state.timerShouldRun,
+        breakActive: state.breakActive,
+        shotclockShouldRun: state.shotclockShouldRun,
+        team1: state.team1,
+        team2: state.team2,
+        team1Players: state.team1Players,
+        team2Players: state.team2Players,
+        cards: state.cards,
+        gameData: state.gameData,
+        eventLogs: state.eventLogs)));
   }
 
   void removeCard(CardPlayer player) {
