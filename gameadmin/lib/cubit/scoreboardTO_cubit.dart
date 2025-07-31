@@ -857,7 +857,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
     addCard(player, card);
   }
 
-  void addCardNoPlayer(PlayerGame player, int card) {
+  void addCardNoPlayer(Team team, int card) {
     var new_number = -1;
     if (state.cards.isNotEmpty) {
       var lowest_card = state.cards.reduce((curr, next) =>
@@ -868,8 +868,8 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
     }
     PlayerGame temp = PlayerGame(
         "",
-        Player("", player.player.team, new_number, getRandomString(1),
-            getRandomString(1), false),
+        Player("", team, new_number, getRandomString(1), getRandomString(1),
+            false),
         0,
         0,
         0,

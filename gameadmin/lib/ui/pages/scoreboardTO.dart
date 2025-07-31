@@ -8,6 +8,7 @@ import 'package:gameadmin/models/card.dart';
 import 'package:gameadmin/models/player.dart';
 import 'package:gameadmin/models/player_game.dart';
 import 'package:gameadmin/models/team.dart';
+import 'package:gameadmin/util/func.dart';
 
 class ScoreBoardTO extends StatelessWidget {
   ScoreBoardTO({Key? key}) : super(key: key);
@@ -151,7 +152,8 @@ class ScoreBoardTO extends StatelessWidget {
                                               "Who scored the goal?",
                                               "Increment Goal",
                                               state.team1Players,
-                                              1);
+                                              1,
+                                              state.team1);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -188,6 +190,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Green Card",
                                                   "Green Card",
                                                   state.team1Players,
+                                                  state.team1,
                                                   1);
                                             },
                                             child: Container(
@@ -213,6 +216,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Yellow Card",
                                                   "Yellow Card",
                                                   state.team1Players,
+                                                  state.team1,
                                                   2);
                                             },
                                             child: Container(
@@ -238,6 +242,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Red Card",
                                                   "Red Card",
                                                   state.team1Players,
+                                                  state.team1,
                                                   3);
                                             },
                                             child: Container(
@@ -263,6 +268,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Red EJECTION Card",
                                                   "Red EJECTION Card",
                                                   state.team1Players,
+                                                  state.team1,
                                                   4);
                                             },
                                             child: ClipRRect(
@@ -660,7 +666,8 @@ class ScoreBoardTO extends StatelessWidget {
                                               "Who scored the goal?",
                                               "Increment Goal",
                                               state.team2Players,
-                                              2);
+                                              2,
+                                              state.team2);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -697,6 +704,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Green Card",
                                                   "Green Card",
                                                   state.team2Players,
+                                                  state.team2,
                                                   1);
                                             },
                                             child: Container(
@@ -722,6 +730,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Yellow Card",
                                                   "Yellow Card",
                                                   state.team2Players,
+                                                  state.team2,
                                                   2);
                                             },
                                             child: Container(
@@ -747,6 +756,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Red Card",
                                                   "Red Card",
                                                   state.team2Players,
+                                                  state.team2,
                                                   3);
                                             },
                                             child: Container(
@@ -772,6 +782,7 @@ class ScoreBoardTO extends StatelessWidget {
                                                   "Red EJECTION Card",
                                                   "Red EJECTION Card",
                                                   state.team2Players,
+                                                  state.team2,
                                                   4);
                                             },
                                             child: ClipRRect(
@@ -1296,7 +1307,7 @@ class ScoreBoardTO extends StatelessWidget {
 
   bool _infoDialogShowing = false;
   void _showDialogScore(BuildContext contextI, String title, String text,
-      List<PlayerGame> players, int team) {
+      List<PlayerGame> players, int team, Team team_obj) {
     _infoDialogShowing = true;
     showDialog(
       context: contextI,
@@ -1376,7 +1387,7 @@ class ScoreBoardTO extends StatelessWidget {
                   BlocProvider.of<ScoreboardTOCubit>(contextI).logEvent(
                       1,
                       "Unknown player scored a goal",
-                      Player('', players[0].player.team, -1, '', '', false));
+                      Player('', team_obj, -1, '', '', false));
                   Navigator.of(context).pop();
                 },
                 child: Text(
@@ -1495,7 +1506,7 @@ class ScoreBoardTO extends StatelessWidget {
   }
 
   void _showDialogCard(BuildContext contextI, String title, String text,
-      List<PlayerGame> players, int card) {
+      List<PlayerGame> players, Team team, int card) {
     _infoDialogShowing = true;
     showDialog(
       context: contextI,
@@ -1569,7 +1580,7 @@ class ScoreBoardTO extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   BlocProvider.of<ScoreboardTOCubit>(contextI)
-                      .addCardNoPlayer(players[0], card);
+                      .addCardNoPlayer(team, card);
                   Navigator.of(context).pop();
                 },
                 child: Text(
