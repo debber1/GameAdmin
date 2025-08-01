@@ -342,14 +342,20 @@ class MatchPicker extends StatelessWidget {
   }
 
   Color bgColourForMatch(Game game) {
-    if (game.played == false) {
+    if (game.played == false &&
+        game.team1.id != "00000000-0000-0000-0000-000000000000" &&
+        game.team2.id != "00000000-0000-0000-0000-000000000000" &&
+        game.teamRef.id != "00000000-0000-0000-0000-000000000000") {
       return Colors.grey.shade300;
     }
     return Colors.blueGrey.shade600;
   }
 
   void startGame(Game game, BuildContext context) {
-    if (game.played == false) {
+    if (game.played == false &&
+        game.team1.id != "00000000-0000-0000-0000-000000000000" &&
+        game.team2.id != "00000000-0000-0000-0000-000000000000" &&
+        game.teamRef.id != "00000000-0000-0000-0000-000000000000") {
       Navigator.pushNamed(context, tournamentOrganiserRoute, arguments: game);
     }
   }
