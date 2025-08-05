@@ -345,7 +345,8 @@ class MatchPicker extends StatelessWidget {
     if (game.played == false &&
         game.team1.id != "00000000-0000-0000-0000-000000000000" &&
         game.team2.id != "00000000-0000-0000-0000-000000000000" &&
-        game.teamRef.id != "00000000-0000-0000-0000-000000000000") {
+        game.teamRef.id != "00000000-0000-0000-0000-000000000000" &&
+        game.forfait == false) {
       return Colors.grey.shade300;
     }
     return Colors.blueGrey.shade600;
@@ -355,7 +356,8 @@ class MatchPicker extends StatelessWidget {
     if (game.played == false &&
         game.team1.id != "00000000-0000-0000-0000-000000000000" &&
         game.team2.id != "00000000-0000-0000-0000-000000000000" &&
-        game.teamRef.id != "00000000-0000-0000-0000-000000000000") {
+        game.teamRef.id != "00000000-0000-0000-0000-000000000000" &&
+        game.forfait == false) {
       Navigator.pushNamed(context, tournamentOrganiserRoute, arguments: game);
     }
   }

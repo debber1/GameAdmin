@@ -34,6 +34,7 @@ class ScoreBoardTO extends StatelessWidget {
           return true;
         },
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'GameAdmin',
           home: Scaffold(
             appBar: PreferredSize(
@@ -398,8 +399,13 @@ class ScoreBoardTO extends StatelessWidget {
                               flex: 5,
                               child: InkWell(
                                 onTap: () {
-                                  BlocProvider.of<ScoreboardTOCubit>(context)
-                                      .startTimer();
+                                  if (state.timerShouldRun) {
+                                    BlocProvider.of<ScoreboardTOCubit>(context)
+                                        .pauseTimer();
+                                  } else {
+                                    BlocProvider.of<ScoreboardTOCubit>(context)
+                                        .startTimer();
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -410,7 +416,8 @@ class ScoreBoardTO extends StatelessWidget {
                                         BorderRadius.all(Radius.circular(10)),
                                   ),
                                   child: Center(
-                                    child: Text("Start"),
+                                    child:
+                                        Text(startOrStop(state.timerShouldRun)),
                                   ),
                                 ),
                               ),
@@ -419,27 +426,27 @@ class ScoreBoardTO extends StatelessWidget {
                               flex: 1,
                               child: Container(),
                             ),
-                            Expanded(
-                              flex: 5,
-                              child: InkWell(
-                                onTap: () {
-                                  BlocProvider.of<ScoreboardTOCubit>(context)
-                                      .pauseTimer();
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Center(
-                                    child: Text("Time out"),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 5,
+                            //   child: InkWell(
+                            //     onTap: () {
+                            //       BlocProvider.of<ScoreboardTOCubit>(context)
+                            //           .pauseTimer();
+                            //     },
+                            //     child: Container(
+                            //       decoration: BoxDecoration(
+                            //         border: Border.all(
+                            //           color: Colors.grey,
+                            //         ),
+                            //         borderRadius:
+                            //             BorderRadius.all(Radius.circular(10)),
+                            //       ),
+                            //       child: Center(
+                            //         child: Text("Time out"),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             Expanded(
                               flex: 1,
                               child: Container(),
@@ -1093,7 +1100,10 @@ class ScoreBoardTO extends StatelessWidget {
       Future.delayed(
           Duration.zero,
           () => _showDialogEnd(
-              context, "End of the game", "The game time has ended."));
+                context,
+                "End of the game",
+                "The game time has ended.",
+              ));
     }
     return _printDuration(Duration(seconds: timer));
   }
@@ -1268,41 +1278,75 @@ class ScoreBoardTO extends StatelessWidget {
 
   void _showDialogEnd(BuildContext contextI, String title, String text) {
     _dialogShowing = true;
-    showDialog(
-      context: contextI,
-      builder: (BuildContext context) {
-        return Expanded(
-          child: AlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
-                  Navigator.pop(contextI);
-                  Navigator.pop(context);
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'End game',
-                  style: TextStyle(color: Colors.black),
+    ScoreboardTOState state =
+        BlocProvider.of<ScoreboardTOCubit>(contextI).giveState();
+
+    bool drawAllowed = state.gameData.drawAllowed;
+
+    if (drawAllowed) {
+      showDialog(
+        context: contextI,
+        builder: (BuildContext context) {
+          return Expanded(
+            child: AlertDialog(
+              title: Text(title),
+              content: Text(text),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                    Navigator.pop(contextI);
+                    Navigator.pop(context);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'End game',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      ).then((_) => _dialogShowing = false);
+    } else {
+      showDialog(
+        context: contextI,
+        builder: (BuildContext context) {
+          return Expanded(
+            child: AlertDialog(
+              title: Text(title),
+              content: Text(text),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                    Navigator.pop(contextI);
+                    Navigator.pop(context);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'End game',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  BlocProvider.of<ScoreboardTOCubit>(contextI).extensions(300);
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Extensions',
-                  style: TextStyle(color: Colors.black),
+                TextButton(
+                  onPressed: () {
+                    BlocProvider.of<ScoreboardTOCubit>(contextI)
+                        .extensions(300);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Extensions',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((_) => _dialogShowing = false);
+              ],
+            ),
+          );
+        },
+      ).then((_) => _dialogShowing = false);
+    }
   }
 
   bool _infoDialogShowing = false;
