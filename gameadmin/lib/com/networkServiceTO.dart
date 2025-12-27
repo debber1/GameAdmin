@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:gameadmin/models/pitch.dart';
 import 'package:gameadmin/util/server.dart';
 import 'package:http/http.dart';
-import 'package:tcp_socket_connection/tcp_socket_connection.dart';
 
 class NetworkServiceTO {
   final String baseUrl = urlTO;
@@ -12,7 +10,7 @@ class NetworkServiceTO {
   Future<String> fetchGames(String pitchId) async {
     try {
       //final url = Uri.parse('$baseUrl/games');
-      final url = Uri.parse('$baseUrl/games.php');
+      final url = Uri.parse('$baseUrl/games');
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
@@ -27,7 +25,7 @@ class NetworkServiceTO {
   Future<dynamic> fetchPitch(String tournamentId) async {
     try {
       // final url = Uri.parse('$baseUrl/pitch');
-      final url = Uri.parse('$baseUrl/pitch.php');
+      final url = Uri.parse('$baseUrl/pitch');
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
@@ -43,7 +41,7 @@ class NetworkServiceTO {
   Future<dynamic> fetchPlayers(String id) async {
     try {
       //final url = Uri.parse('$baseUrl/detail');
-      final url = Uri.parse('$baseUrl/detail.php');
+      final url = Uri.parse('$baseUrl/detail');
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
@@ -59,7 +57,7 @@ class NetworkServiceTO {
   Future<dynamic> pushResult(String data) async {
     try {
       //final url = Uri.parse('$baseUrl/gameResult');
-      final url = Uri.parse('$baseUrl/gameResult.php');
+      final url = Uri.parse('$baseUrl/gameResult');
       final headers = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
@@ -81,13 +79,6 @@ class NetworkServiceTO {
           List<int> data = utf8.encode(datagram);
           udpSocket.send(data, DESTINATION_ADDRESS, 10000);
         });
-/*         TcpSocketConnection tcpSocketConnection = TcpSocketConnection(scoreIP, 10000);
-        if (await tcpSocketConnection.canConnect(250, attempts: 1)) {
-          //check if it's possible to connect to the endpoint
-          final connection = await tcpSocketConnection.connect(5000, recieveMessage, attempts: 3);
-          tcpSocketConnection.sendMessage(data);
-          tcpSocketConnection.disconnect();
-        } */
       } catch (e) {
         print(e);
       }

@@ -358,6 +358,7 @@ class MatchPicker extends StatelessWidget {
         game.team2.id != "00000000-0000-0000-0000-000000000000" &&
         game.teamRef.id != "00000000-0000-0000-0000-000000000000" &&
         game.forfait == false) {
+      // if (true) {
       Navigator.pushNamed(context, tournamentOrganiserRoute, arguments: game);
     }
   }

@@ -56,6 +56,7 @@ class ScoreboardTOCubit extends Cubit<ScoreboardTOState> {
       }
       repositoryTo.syncScoreBoard(state.timer, state.shotclock, state.score1,
           state.score2, state.gameData.pitch);
+      fixGoal();
     });
   }
 

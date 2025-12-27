@@ -1109,36 +1109,41 @@ class ScoreBoardTO extends StatelessWidget {
   }
 
   bool _dialogShowing = false;
+  bool _gameEnded = false;
   void _showDialogGeneral(BuildContext contextI, String title, String text) {
-    _dialogShowing = true;
-    showDialog(
-      context: contextI,
-      builder: (BuildContext context) {
-        return Expanded(
-          child: AlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  //Ugly hack (should be fixed)
-                  if (title == "End of the game") {
-                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
-                    Navigator.pop(contextI);
-                    Navigator.pop(context);
-                  }
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'OK',
-                  style: TextStyle(color: Colors.black),
+    if (!_gameEnded) {
+      _dialogShowing = true;
+      showDialog(
+        context: contextI,
+        builder: (BuildContext context) {
+          return Expanded(
+            child: AlertDialog(
+              title: Text(title),
+              content: Text(text),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    //Ugly hack (should be fixed)
+                    if (title == "End of the game") {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                      Navigator.maybePop(contextI);
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).killTimer();
+                      _gameEnded = true;
+                      Navigator.pop(context);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((_) => _dialogShowing = false);
+              ],
+            ),
+          );
+        },
+      ).then((_) => _dialogShowing = false);
+    }
   }
 
   void _showGameSheet(BuildContext contextI) {
@@ -1277,75 +1282,82 @@ class ScoreBoardTO extends StatelessWidget {
   }
 
   void _showDialogEnd(BuildContext contextI, String title, String text) {
-    _dialogShowing = true;
-    ScoreboardTOState state =
-        BlocProvider.of<ScoreboardTOCubit>(contextI).giveState();
+    if (!_gameEnded) {
+      _dialogShowing = true;
+      ScoreboardTOState state =
+          BlocProvider.of<ScoreboardTOCubit>(contextI).giveState();
 
-    bool drawAllowed = state.gameData.drawAllowed;
+      bool drawAllowed = state.gameData.drawAllowed;
+      BlocProvider.of<ScoreboardTOCubit>(contextI).pauseTimer();
 
-    if (drawAllowed) {
-      showDialog(
-        context: contextI,
-        builder: (BuildContext context) {
-          return Expanded(
-            child: AlertDialog(
-              title: Text(title),
-              content: Text(text),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
-                    Navigator.pop(contextI);
-                    Navigator.pop(context);
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'End game',
-                    style: TextStyle(color: Colors.black),
+      if (drawAllowed) {
+        showDialog(
+          context: contextI,
+          builder: (BuildContext context) {
+            return Expanded(
+              child: AlertDialog(
+                title: Text(title),
+                content: Text(text),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                      Navigator.maybePop(contextI);
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).killTimer();
+                      _gameEnded = true;
+                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'End game',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ).then((_) => _dialogShowing = false);
+      } else {
+        showDialog(
+          context: contextI,
+          builder: (BuildContext context) {
+            return Expanded(
+              child: AlertDialog(
+                title: Text(title),
+                content: Text(text),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
+                      Navigator.maybePop(contextI);
+                      BlocProvider.of<ScoreboardTOCubit>(contextI).killTimer();
+                      _gameEnded = true;
+                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'End game',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      ).then((_) => _dialogShowing = false);
-    } else {
-      showDialog(
-        context: contextI,
-        builder: (BuildContext context) {
-          return Expanded(
-            child: AlertDialog(
-              title: Text(title),
-              content: Text(text),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<ScoreboardTOCubit>(contextI).pushServer();
-                    Navigator.pop(contextI);
-                    Navigator.pop(context);
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'End game',
-                    style: TextStyle(color: Colors.black),
+                  TextButton(
+                    onPressed: () {
+                      BlocProvider.of<ScoreboardTOCubit>(contextI)
+                          .extensions(300);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Extensions',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    BlocProvider.of<ScoreboardTOCubit>(contextI)
-                        .extensions(300);
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Extensions',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ).then((_) => _dialogShowing = false);
+                ],
+              ),
+            );
+          },
+        ).then((_) => _dialogShowing = false);
+      }
     }
   }
 
@@ -1383,8 +1395,11 @@ class ScoreBoardTO extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Center(
-                                  child: Text('Player ' +
-                                      players[index].player.number.toString())),
+                                  child: Text(
+                                players[index].player.number.toString(),
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              )),
                             ),
                             Expanded(
                               child: Center(
@@ -1485,8 +1500,11 @@ class ScoreBoardTO extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Center(
-                                  child: Text('Player ' +
-                                      players[index].player.number.toString())),
+                                  child: Text(
+                                players[index].player.number.toString(),
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              )),
                             ),
                             Expanded(
                               child: Center(
@@ -1580,8 +1598,11 @@ class ScoreBoardTO extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Center(
-                                  child: Text('Player ' +
-                                      players[index].player.number.toString())),
+                                  child: Text(
+                                players[index].player.number.toString(),
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              )),
                             ),
                             Expanded(
                               child: Center(

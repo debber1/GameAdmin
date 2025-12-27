@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gameadmin/legacyHttpOverrides.dart';
 import 'package:gameadmin/ui/router.dart';
 
 void main() {
+  HttpOverrides.global = LegacyHttpOverrides();
   runApp(MyApp(
     router: GameAdminRouter(),
   ));
